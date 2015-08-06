@@ -1,0 +1,7 @@
+alchemy_rest:
+  exceptions:
+    enabled: true
+    content-types:
+      - application/json
+      - application/vnd.alchemy.test+json
+

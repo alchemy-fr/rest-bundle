@@ -1,0 +1,38 @@
+services:
+  alchemy_rest.fractal_manager:
+    class: League\Fractal\Manager
+    public: false
+
+  alchemy_rest.array_transformer:
+    class: Alchemy\Rest\Response\ArrayTransformer
+    arguments:
+      - @alchemy_rest.fractal_manager
+
+  alchemy_rest.exception_transformer:
+    class: Alchemy\Rest\Response\ExceptionTransformer\DefaultExceptionTransformer
+    public: false
+
+  alchemy_rest.exception_listener:
+    class: Alchemy\RestBundle\EventListener\ExceptionListener
+    arguments:
+      - @alchemy_rest.exception_transformer
+      - []
+
+  alchemy_rest.date_parser:
+    class: Alchemy\Rest\Request\DateParser\UtcDateParser
+    arguments:
+      - ~
+      - ~
+
+  alchemy_rest.request_listener:
+    class: Alchemy\RestBundle\EventListener\RequestListener
+    arguments:
+      - @alchemy_rest.date_parser
+
+  alchemy_rest.response_listener:
+    class: Alchemy\RestBundle\EventListener\ResponseListener
+    arguments:
+      - @alchemy_rest.array_transformer
+      - @router
+    tags:
+      - { name: kernel.event_subscriber }
