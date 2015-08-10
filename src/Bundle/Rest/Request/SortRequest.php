@@ -4,7 +4,6 @@ namespace Alchemy\RestBundle\Request;
 
 use Alchemy\Rest\Request\Sort;
 use Alchemy\Rest\Request\SortOptions;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SortRequest implements SortOptions
 {
@@ -23,17 +22,12 @@ class SortRequest implements SortOptions
      */
     private $direction;
 
-    /**
-     * @param OptionsResolver $resolver
-     * @param array $options
-     */
-    public function __construct(OptionsResolver $resolver, array $options)
-    {
-        $options = $resolver->resolve($options);
 
-        $this->sorts = $options['sorts'];
-        $this->property = $options['sort'];
-        $this->direction = $options['dir'];
+    public function __construct($sorts, $property = null, $direction = null)
+    {
+        $this->sorts = $sorts;
+        $this->property = $property;
+        $this->direction = $direction;
     }
 
     /**

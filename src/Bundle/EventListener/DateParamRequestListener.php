@@ -9,11 +9,15 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class DateParamRequestListener implements EventSubscriberInterface
 {
+
     /**
      * @var DateParser
      */
     private $dateParser;
 
+    /**
+     * @param DateParser $parser
+     */
     public function __construct(DateParser $parser = null)
     {
         $this->dateParser = $parser ?: new DateParser\UtcDateParser();

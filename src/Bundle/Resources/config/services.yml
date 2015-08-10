@@ -20,14 +20,28 @@ services:
 
   alchemy_rest.date_parser:
     class: Alchemy\Rest\Request\DateParser\UtcDateParser
+    public: false
     arguments:
       - ~
       - ~
 
-  alchemy_rest.request_listener:
-    class: Alchemy\RestBundle\EventListener\RequestListener
+  alchemy_rest.date_request_listener:
+    class: Alchemy\RestBundle\EventListener\DateParamRequestListener
     arguments:
       - @alchemy_rest.date_parser
+
+  alchemy_rest.sort_options_factory:
+    class: Alchemy\RestBundle\Request\SortOptionsFactory
+    public: false
+    arguments:
+      - ~
+      - ~
+      - ~
+
+  alchemy_rest.sort_request_listener:
+    class: Alchemy\RestBundle\EventListener\SortParamRequestListener
+    arguments:
+      - @alchemy_rest.sort_options_factory
 
   alchemy_rest.response_listener:
     class: Alchemy\RestBundle\EventListener\ResponseListener

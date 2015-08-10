@@ -3,6 +3,7 @@
 namespace Alchemy\RestBundle\Request;
 
 use Alchemy\RestBundle\Rest\Request\PaginationRequest;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PaginationOptionsFactory
 {
@@ -36,6 +37,32 @@ class PaginationOptionsFactory
         $offsetName = isset($config['offset']) ? $config['offset'] : $this->offsetName;
         $limitName = isset($config['limit']) ? $config['limit'] : $this->limitName;
 
-        return new PaginationRequest($request, $offsetName, $limitName);
+        $resolver = $this->configureResolver($request, $offsetName, $limitName);
+        $options = $resolver->resolve($request);
+
+        return new PaginationRequest($options[$offsetName], $options[$limitName]);
+    }
+
+    /**
+     * @param array $options
+     * @param string $offsetName
+     * @param string $limitName
+     * @return OptionsResolver
+     */
+    private function configureResolver(array $options, $offsetName, $limitName)
+    {
+        $optionsResolver = new OptionsResolver();
+
+        $optionsResolver->setDefined(array_merge(array(
+            $offsetName,
+            $limitName
+        ), array_keys($options)));
+
+        $optionsResolver->setDefaults(array(
+            $offsetName => 0,
+            $limitName => 15
+        ));
+
+        return $optionsResolver;
     }
 }

@@ -3,7 +3,6 @@
 namespace Alchemy\RestBundle\EventListener;
 
 use Alchemy\RestBundle\Request\SortOptionsFactory;
-use Alchemy\RestBundle\Request\SortRequest;
 use Alchemy\Rest\Request\DateParser;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;

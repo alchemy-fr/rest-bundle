@@ -7,13 +7,26 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SortOptionsFactory
 {
-
+    /**
+     * @var string
+     */
     private $sortName;
 
+    /**
+     * @var string
+     */
     private $directionName;
 
+    /**
+     * @var string
+     */
     private $multisortName;
 
+    /**
+     * @param string $sortName
+     * @param string $directionName
+     * @param string $multisortName
+     */
     public function __construct($sortName, $directionName, $multisortName)
     {
         $this->sortName = $sortName;
@@ -21,34 +34,44 @@ class SortOptionsFactory
         $this->multisortName = $multisortName;
     }
 
+    /**
+     * @param array $request
+     * @param array $config
+     * @return SortRequest
+     */
     public function create(array $request, array $config)
     {
-        $resolver = $this->configureResolver($request);
+        $sortName = isset($config['sort_parameter']) ? $config['sort_parameter'] : $this->sortName;
+        $directionName = isset($config['direction_parameter']) ? $config['direction_parameter'] : $this->directionName;
+        $multisortName = isset($config['multi_sort_parameter']) ? $config['multi_sort_parameter'] : $this->multisortName;
 
-        return new SortRequest($resolver, $request);
+        $resolver = $this->configureResolver($request, $sortName, $directionName, $multisortName);
+        $values = $resolver->resolve($request);
+
+        return new SortRequest($values[$multisortName], $values[$sortName], $values[$directionName]);
     }
 
     /**
      * @param array $options
+     * @param string $sortName
+     * @param string $directionName
+     * @param string $multisortName
      * @return OptionsResolver
      */
-    private function configureResolver(array $options)
+    private function configureResolver(array $options, $sortName, $directionName, $multisortName)
     {
         $optionsResolver = new OptionsResolver();
 
-        $optionsResolver->setDefined(array_merge(array(
-            $this->sortName,
-            $this->directionName,
-            $this->multisortName
-        ), array_keys($options)));
+        $keys = array(
+            $sortName => null,
+            $directionName => null,
+            $multisortName => null
+        );
 
-        $optionsResolver->setDefaults(array(
-            $this->sortName => null,
-            $this->directionName => null,
-            $this->multisortName => null
-        ));
+        $optionsResolver->setDefined(array_merge(array_keys($keys), array_keys($options)));
+        $optionsResolver->setDefaults($keys);
 
-        $optionsResolver->setAllowedValues($this->directionName, array(
+        $optionsResolver->setAllowedValues($directionName, array(
             strtoupper(SortOptions::SORT_ASC),
             strtolower(SortOptions::SORT_ASC),
             strtoupper(SortOptions::SORT_DESC),

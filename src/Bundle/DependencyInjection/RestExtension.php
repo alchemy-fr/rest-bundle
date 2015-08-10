@@ -10,11 +10,20 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 class RestExtension extends ConfigurableExtension
 {
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @return RestConfiguration
+     */
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
         return new RestConfiguration();
     }
 
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     */
     protected function loadInternal(array $config, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader($container, new FileLocator(
@@ -24,9 +33,14 @@ class RestExtension extends ConfigurableExtension
         $loader->load('services.yml');
 
         $this->configureExceptionListener($config['exceptions'], $container);
-        $this->configureRequestListener($config, $container);
+        $this->configureDateRequestListener($config, $container);
+        $this->configureSortRequestListener($config, $container);
     }
 
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     */
     protected function configureExceptionListener(array $config, ContainerBuilder $container)
     {
         if (! $config['exceptions']['enabled']) {
@@ -44,17 +58,56 @@ class RestExtension extends ConfigurableExtension
         $listenerDefinition->replaceArgument(1, $config['exceptions']['content_types']);
     }
 
-    protected function configureRequestListener(array $config, ContainerBuilder $container)
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     */
+    protected function configureDateRequestListener(array $config, ContainerBuilder $container)
     {
         if (! $config['dates']['enabled']) {
-            $container->removeDefinition('alchemy_rest.request_listener');
+            $container->removeDefinition('alchemy_rest.date_request_listener');
 
             return;
         }
 
-        $dateParserDefinition = $container->getDefinition('alchemy_rest.date_parser');
+        $dateParser = $container->getDefinition('alchemy_rest.date_parser');
 
-        $dateParserDefinition->replaceArgument(0, $config['dates']['timezone']);
-        $dateParserDefinition->replaceArgument(1, $config['dates']['format']);
+        $dateParser->replaceArgument(0, $config['dates']['timezone']);
+        $dateParser->replaceArgument(1, $config['dates']['format']);
+    }
+
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     */
+    protected function configureSortRequestListener(array $config, ContainerBuilder $container)
+    {
+        if (! $config['sort']['enabled']) {
+            $container->removeDefinition('alchemy_rest.sort_request_listener');
+
+            return;
+        }
+
+        $sortOptionsFactory = $container->getDefinition('alchemy_rest.sort_options_factory');
+        $sortOptionsFactory->setArguments(array(
+            $config['sort']['sort_parameter'],
+            $config['sort']['direction_parameter'],
+            $config['sort']['multi_sort_parameter']
+        ));
+    }
+
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     */
+    protected function configurePaginationRequestListener(array $config, ContainerBuilder $container)
+    {
+        if (! $config['pagination']['enabled']) {
+            $container->removeDefinition('alchemy_rest.pagination_request_listener');
+
+            return;
+        }
+
+
     }
 }
