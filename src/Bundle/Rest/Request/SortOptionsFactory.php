@@ -2,6 +2,7 @@
 
 namespace Alchemy\RestBundle\Rest\Request;
 
+use Alchemy\Rest\Request\SortOptions;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SortOptionsFactory

@@ -50,8 +50,8 @@ class ResponseListener implements EventSubscriberInterface
             $transformedData = $this->transformer->transformList(
                 $config['name'],
                 $data,
-                $this->buildPaginatorAdapter($data, $request),
-                $includes
+                $includes,
+                $this->buildPaginatorAdapter($data, $request)
             );
         } else {
             $transformedData = $this->transformer->transform(

@@ -17,7 +17,11 @@ class TransformerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition('alchemy_rest.array_transformer');
+        if (! $container->hasDefinition('alchemy_rest.array_transformer')) {
+            return;
+        }
+
+        $definition = $container->findDefinition('alchemy_rest.array_transformer');
         $transformerTags = $container->findTaggedServiceIds('alchemy_rest.transformer');
 
         foreach ($transformerTags as $id => $tags) {
