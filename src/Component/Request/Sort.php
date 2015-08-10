@@ -21,7 +21,7 @@ class Sort
     public function __construct($fieldName, $direction)
     {
         $this->fieldName = $fieldName;
-        $this->direction = $direction;
+        $this->direction = strtoupper($direction);
     }
 
     /**

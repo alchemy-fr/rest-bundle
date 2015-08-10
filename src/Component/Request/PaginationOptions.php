@@ -7,10 +7,10 @@ interface PaginationOptions
     /**
      * @return int
      */
-    public function getLimit();
+    public function getLimit($defaultValue = null);
 
     /**
      * @return int
      */
-    public function getOffset();
+    public function getOffset($defaultValue = null);
 }

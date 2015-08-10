@@ -48,7 +48,7 @@ class ArrayTransformer
             throw new \RuntimeException('Invalid transformer requested.');
         }
 
-        return $this->transformers;
+        return $this->transformers[$key];
     }
 
     /**

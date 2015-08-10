@@ -4,7 +4,7 @@ namespace Alchemy\Rest\Request\DateParser;
 
 use Alchemy\Rest\Request\DateParser;
 
-class UtcDateParser implements DateParser
+class FormatDateParser implements DateParser
 {
 
     const FORMAT = 'Y-m-d\TH:i:s\Z';

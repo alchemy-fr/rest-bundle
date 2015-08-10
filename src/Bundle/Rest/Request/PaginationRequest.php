@@ -32,18 +32,20 @@ class PaginationRequest implements PaginationOptions
     }
 
     /**
+     * @param null|int $defaultValue
      * @return int
      */
-    public function getOffset()
+    public function getOffset($defaultValue = null)
     {
-        return $this->offset;
+        return $this->offset > 0 || $defaultValue === null ? $this->offset : (int) $defaultValue;
     }
 
     /**
+     * @param null|int $defaultValue
      * @return int
      */
-    public function getLimit()
+    public function getLimit($defaultValue = null)
     {
-        return $this->limit;
+        return $this->limit > 0 || $defaultValue === null ? $this->limit : (int) $defaultValue;
     }
 }
