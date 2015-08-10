@@ -2,7 +2,7 @@
 
 namespace Alchemy\RestBundle\EventListener;
 
-use Alchemy\RestBundle\Request\PaginationOptionsFactory;
+use Alchemy\RestBundle\Rest\Request\PaginationOptionsFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;

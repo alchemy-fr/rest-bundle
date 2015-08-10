@@ -38,6 +38,23 @@ class TransformerCompilerPassTest extends \PHPUnit_Framework_TestCase
         $compilerPass->process($container->reveal());
     }
 
+    public function validateSetTransformerArguments($arguments)
+    {
+        if (! is_array($arguments) || count($arguments) != 2) {
+            return false;
+        }
+
+        if ($arguments[0] !== 'transformer') {
+            return false;
+        }
+
+        if (! $arguments[1] instanceof Reference && ((string)$arguments[1]) !== 'test') {
+            return false;
+        }
+
+        return true;
+    }
+
     public function testCompilerPassAddsTaggedDefinitionsToTransformerService()
     {
         $container = $this->prophesize(self::CONTAINER_CLASS);
@@ -45,21 +62,10 @@ class TransformerCompilerPassTest extends \PHPUnit_Framework_TestCase
         $taggedDefinition = $this->prophesize(self::DEFINITION_CLASS);
         $taggedId = 'test';
 
-        $definition->addMethodCall(Argument::exact('setTransformer'), Argument::that(function ($arguments) {
-            if (count($arguments) != 2) {
-                return false;
-            }
-
-            if ($arguments[0] !== 'transformer') {
-                return false;
-            }
-
-            if (! $arguments[1] instanceof Reference && ((string)$arguments[1]) !== 'test') {
-                return false;
-            }
-
-            return true;
-        }))->shouldBeCalled();
+        $definition->addMethodCall(Argument::exact('setTransformer'), Argument::that(array(
+            $this,
+            'validateSetTransformerArguments'
+        )))->shouldBeCalled();
 
         $container->hasDefinition(Argument::any())->willReturn(true);
         $container->findDefinition(Argument::any())->willReturn($definition->reveal());

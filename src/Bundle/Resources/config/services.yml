@@ -19,7 +19,7 @@ services:
       - []
 
   alchemy_rest.date_parser:
-    class: Alchemy\Rest\Request\DateParser\UtcDateParser
+    class: Alchemy\Rest\Request\DateParser\FormatDateParser
     public: false
     arguments:
       - ~
@@ -30,8 +30,19 @@ services:
     arguments:
       - @alchemy_rest.date_parser
 
+  alchemy_rest.paginate_options_factory:
+    class: Alchemy\RestBundle\Rest\Request\PaginationOptionsFactory
+    arguments:
+      - ~
+      - ~
+
+  alchemy_rest.paginate_request_listener:
+    class: Alchemy\RestBundle\EventListener\PaginationParamRequestListener
+    arguments:
+      - @alchemy_rest.paginate_options_factory
+
   alchemy_rest.sort_options_factory:
-    class: Alchemy\RestBundle\Request\SortOptionsFactory
+    class: Alchemy\RestBundle\Rest\Request\SortOptionsFactory
     public: false
     arguments:
       - ~

@@ -34,6 +34,7 @@ class RestExtension extends ConfigurableExtension
 
         $this->configureExceptionListener($config['exceptions'], $container);
         $this->configureDateRequestListener($config, $container);
+        $this->configurePaginationRequestListener($config, $container);
         $this->configureSortRequestListener($config, $container);
     }
 
@@ -43,7 +44,7 @@ class RestExtension extends ConfigurableExtension
      */
     protected function configureExceptionListener(array $config, ContainerBuilder $container)
     {
-        if (! $config['exceptions']['enabled']) {
+        if (! $config['enabled']) {
             $container->removeDefinition('alchemy_rest.exception_listener');
 
             return;
@@ -51,11 +52,11 @@ class RestExtension extends ConfigurableExtension
 
         $listenerDefinition = $container->getDefinition('alchemy_rest.exception_listener');
 
-        if ($config['exceptions']['transformer'] !== null) {
-            $listenerDefinition->replaceArgument(0, new Reference($config['exceptions']['transformer']));
+        if ($config['transformer'] !== null) {
+            $listenerDefinition->replaceArgument(0, new Reference($config['transformer']));
         }
 
-        $listenerDefinition->replaceArgument(1, $config['exceptions']['content_types']);
+        $listenerDefinition->replaceArgument(1, $config['content_types']);
     }
 
     /**
@@ -72,8 +73,10 @@ class RestExtension extends ConfigurableExtension
 
         $dateParser = $container->getDefinition('alchemy_rest.date_parser');
 
-        $dateParser->replaceArgument(0, $config['dates']['timezone']);
-        $dateParser->replaceArgument(1, $config['dates']['format']);
+        $dateParser->setArguments(array(
+            $config['dates']['timezone'],
+            $config['dates']['format']
+        ));
     }
 
     /**
@@ -103,11 +106,16 @@ class RestExtension extends ConfigurableExtension
     protected function configurePaginationRequestListener(array $config, ContainerBuilder $container)
     {
         if (! $config['pagination']['enabled']) {
-            $container->removeDefinition('alchemy_rest.pagination_request_listener');
+            $container->removeDefinition('alchemy_rest.paginate_request_listener');
 
             return;
         }
 
+        $paginateOptionsFactory = $container->getDefinition('alchemy_rest.paginate_options_factory');
 
+        $paginateOptionsFactory->setArguments(array(
+            $config['pagination']['offset_parameter'],
+            $config['pagination']['limit_parameter']
+        ));
     }
 }
