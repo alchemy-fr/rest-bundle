@@ -35,6 +35,7 @@ class FormatDateParserTest extends \PHPUnit_Framework_TestCase
         $parser = new FormatDateParser(date_default_timezone_get(), 'Y-m-d H:i:s');
         $date = $parser->parseDate('2015-08-01 15:25:30');
 
+        $this->assertEquals(date_default_timezone_get(), $date->getTimezone()->getName());
         $this->assertEquals('1438435530', $date->getTimestamp());
     }
 
