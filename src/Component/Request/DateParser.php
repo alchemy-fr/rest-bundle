@@ -2,7 +2,7 @@
 
 namespace Alchemy\Rest\Request;
 
-interface DateParser 
+interface DateParser
 {
     /**
      * @param $value

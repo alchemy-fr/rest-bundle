@@ -43,7 +43,8 @@ class SortOptionsFactory
     {
         $sortName = isset($config['sort_parameter']) ? $config['sort_parameter'] : $this->sortName;
         $directionName = isset($config['direction_parameter']) ? $config['direction_parameter'] : $this->directionName;
-        $multisortName = isset($config['multi_sort_parameter']) ? $config['multi_sort_parameter'] : $this->multisortName;
+        $multisortName = isset($config['multi_sort_parameter']) ?
+            $config['multi_sort_parameter'] : $this->multisortName;
 
         $resolver = $this->configureResolver($request, $sortName, $directionName, $multisortName);
         $values = $resolver->resolve($request);

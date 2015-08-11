@@ -2,7 +2,7 @@
 
 namespace Alchemy\Rest\Request;
 
-interface PaginationOptions 
+interface PaginationOptions
 {
     /**
      * @return int

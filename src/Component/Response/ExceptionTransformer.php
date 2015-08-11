@@ -2,7 +2,7 @@
 
 namespace Alchemy\Rest\Response;
 
-interface ExceptionTransformer 
+interface ExceptionTransformer
 {
     /**
      * @param \Exception $exception

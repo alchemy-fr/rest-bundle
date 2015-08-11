@@ -2,7 +2,7 @@
 
 namespace Alchemy\Rest\Request;
 
-class Sort 
+class Sort
 {
     /**
      * @var string
