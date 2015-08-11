@@ -20,7 +20,7 @@ class DateParamRequestListener implements EventSubscriberInterface
      */
     public function __construct(DateParser $parser = null)
     {
-        $this->dateParser = $parser ?: new DateParser\UtcDateParser();
+        $this->dateParser = $parser ?: new DateParser\FormatDateParser();
     }
 
     /**

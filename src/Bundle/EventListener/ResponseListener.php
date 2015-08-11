@@ -2,10 +2,10 @@
 
 namespace Alchemy\RestBundle\EventListener;
 
-use League\Fractal\Pagination\PagerfantaPaginatorAdapter;
-use Pagerfanta\Pagerfanta;
 use Alchemy\Rest\Request\PaginationOptions;
 use Alchemy\Rest\Response\ArrayTransformer;
+use League\Fractal\Pagination\PagerfantaPaginatorAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;

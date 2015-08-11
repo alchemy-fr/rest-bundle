@@ -21,5 +21,16 @@ composer.lock: $(VALIDATE)
 composer.status:
 	rm -f composer.lock
 
+ocular:
+	[ ! -f ocular.phar ] && wget https://scrutinizer-ci.com/ocular.phar
+
+ifdef OCULAR_TOKEN
+scrutinizer: ocular
+	@php ocular.phar code-coverage:upload --format=php-clover tests/output/coverage.clover --access-token=$(OCULAR_TOKEN);
+else
+scrutinizer: ocular
+	php ocular.phar code-coverage:upload --format=php-clover tests/output/coverage.clover;
+endif
+
 clean-deps:
 	rm -rf vendor/

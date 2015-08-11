@@ -13,6 +13,7 @@ install:
   - make deps
 script:
   - make test
+  - if [ $(phpenv version-name) = '5.6' ]; then make scrutinizer; fi
 notifications:
   hipchat:
     rooms:
