@@ -1,4 +1,4 @@
-VALIDATE = $(shell composer validate 2>&1 | grep -q "lock file" || echo "composer.status")
+VALIDATE = $(shell composer validate 2>&1 | grep -q "lock file" && echo "composer.status")
 
 .PHONY: test clean-deps composer.status
 
