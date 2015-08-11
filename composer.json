@@ -1,5 +1,6 @@
 {
   "name": "alchemy/rest-bundle",
+  "description": "Simple REST utility bundle",
   "authors": [
     {
       "name": "Thibaud Fabre",
