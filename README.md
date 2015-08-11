@@ -1,5 +1,8 @@
 # Alchemy - Rest bundle
 
+[![Build Status](https://travis-ci.org/alchemy-fr/rest-bundle.svg?branch=master)](https://travis-ci.org/alchemy-fr/rest-bundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/?branch=master)
+
 ## Features
 
 - Provides automatic date parameter parsing using a predefined format and timezone
