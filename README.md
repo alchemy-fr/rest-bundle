@@ -103,7 +103,7 @@ class MyController
 This listener is always activated. To use it, you must first write a Transformer (see the League/Fractal documentation
 for information on transformers), and define it as a tagged service in your dependency injection configuration:
 
-```
+```yml
 services:
     my_transformer:
         class: My\Transformer
