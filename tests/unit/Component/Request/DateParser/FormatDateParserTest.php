@@ -32,11 +32,11 @@ class FormatDateParserTest extends \PHPUnit_Framework_TestCase
     public function testParseReturnsCorrectDate()
     {
         // Using current timezone is required as this format has no TZ info
-        $parser = new FormatDateParser(date_default_timezone_get(), 'Y-m-d H:i:s');
+        $parser = new FormatDateParser('UTC', 'Y-m-d H:i:s');
         $date = $parser->parseDate('2015-08-01 15:25:30');
 
-        $this->assertEquals(date_default_timezone_get(), $date->getTimezone()->getName());
-        $this->assertEquals('1438435530', $date->getTimestamp());
+        $this->assertEquals('UTC', $date->getTimezone()->getName());
+        $this->assertEquals('1438442730', $date->getTimestamp());
     }
 
     public function testParseReturnsDateWithCorrectTimezone()
