@@ -1,6 +1,7 @@
 # Alchemy - Rest bundle
 
 [![Build Status](https://travis-ci.org/alchemy-fr/rest-bundle.svg?branch=master)](https://travis-ci.org/alchemy-fr/rest-bundle)
+[![Code Coverage](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/?branch=master)
 
 ## Features
