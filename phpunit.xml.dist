@@ -33,5 +33,8 @@
         <testsuite name="Bundle tests">
             <directory suffix=".php">tests/unit/Bundle</directory>
         </testsuite>
+        <testsuite name="Provider tests">
+            <directory suffix=".php">tests/unit/Provider</directory>
+        </testsuite>
     </testsuites>
 </phpunit>
