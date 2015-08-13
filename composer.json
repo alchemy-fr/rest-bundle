@@ -10,7 +10,8 @@
   "autoload": {
     "psr-4": {
       "Alchemy\\Rest\\": "src/Component",
-      "Alchemy\\RestBundle\\": "src/Bundle"
+      "Alchemy\\RestBundle\\": "src/Bundle",
+      "Alchemy\\RestProvider\\": "src/Provider"
     }
   },
   "license": "MIT",
@@ -18,6 +19,7 @@
     "pagerfanta/pagerfanta": "^1.0.3",
     "phpunit/phpunit": "^4.7",
     "symfony/symfony": "~2.6",
+    "silex/silex": "^1.0.0",
     "squizlabs/php_codesniffer": "^2.3"
   },
   "require": {
