@@ -15,7 +15,7 @@ fixcs:
 
 deps: composer.lock vendor/composer/installed.json
 
-vendor/composer/installed.json:
+vendor/composer/installed.json: composer.json
 	composer install
 
 composer.lock: $(VALIDATE)

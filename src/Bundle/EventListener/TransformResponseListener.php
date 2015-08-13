@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Router;
 
-class ResponseListener implements EventSubscriberInterface
+class TransformResponseListener implements EventSubscriberInterface
 {
     /**
      * @var Router
@@ -38,35 +38,22 @@ class ResponseListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if (!$request->attributes->has('_fractal')) {
+        if (!$request->attributes->has('_rest')) {
             return;
         }
 
-        $config = $this->normalizeConfig($request->attributes->get('_fractal', array(), true));
+        $config = $this->normalizeConfig($request->attributes->get('_rest', array(), true));
         $includes = $request->query->get('include', null);
         $data = $event->getControllerResult();
 
-        if ($config['list']) {
-            $transformedData = $this->transformer->transformList(
-                $config['name'],
-                $data,
-                $includes,
-                $this->buildPaginatorAdapter($data, $request)
-            );
-        } else {
-            $transformedData = $this->transformer->transform(
-                $config['name'],
-                $data,
-                $includes
-            );
-        }
+        $transformedData = $this->transformResult($config, $data, $includes, $request);
 
-        $event->setResponse(new JsonResponse($transformedData));
+        $event->setControllerResult($transformedData);
     }
 
     protected function normalizeConfig(array $config)
     {
-        if (!isset($config['name']) || trim($config['name'] == '')) {
+        if (!isset($config['transform']) || trim($config['transform'] == '')) {
             throw new \RuntimeException('Transformer key is not set.');
         }
 
@@ -101,6 +88,31 @@ class ResponseListener implements EventSubscriberInterface
 
             return $this->router->generate($request->attributes->get('_route'), $params);
         });
+    }
+
+    /**
+     * @param $config
+     * @param $data
+     * @param $includes
+     * @param $request
+     * @return array
+     */
+    private function transformResult($config, $data, $includes, $request)
+    {
+        if ($config['list']) {
+            return  $this->transformer->transformList(
+                $config['transform'],
+                $data,
+                $includes,
+                $this->buildPaginatorAdapter($data, $request)
+            );
+        }
+
+        return $transformedData = $this->transformer->transform(
+            $config['transform'],
+            $data,
+            $includes
+        );
     }
 
     public static function getSubscribedEvents()

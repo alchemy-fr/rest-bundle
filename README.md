@@ -118,7 +118,11 @@ Then in your routing file, you need to specify the transformer for a given route
 my_application.api_route:
     pattern: /api/route
     defaults:
-        _fractal: { name: my_transformer, list: false }
+        _rest:
+            decode_request: true # Enabled by default, decodes JSON request bodies into 
+            encode_response: true
+            transform: my_transformer
+            list: false
 ```
 
 You can use the `list` parameter in your route defaults to specifiy whether the controller result should be handled

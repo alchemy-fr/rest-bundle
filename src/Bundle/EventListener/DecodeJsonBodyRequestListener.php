@@ -4,6 +4,7 @@ namespace Alchemy\RestBundle\EventListener;
 
 use Alchemy\Rest\Request\ContentTypeMatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -32,17 +33,30 @@ class DecodeJsonBodyRequestListener implements EventSubscriberInterface
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        $acceptHeader = $request->headers->get('Accept', '*/*');
 
-        if (! $this->contentTypeMatcher->matches($acceptHeader, $this->contentTypes)) {
+        if (! $request->attributes->get('_rest[decode_response]', false, true)) {
+            return;
+        }
+
+        $this->decodeBody($request);
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function decodeBody(Request $request)
+    {
+        $acceptHeader = $request->headers->get('Content-Type', '*/*');
+
+        if (!$this->contentTypeMatcher->matches($acceptHeader, $this->contentTypes)) {
             return;
         }
 
         $jsonBody = $request->getContent(false);
         $decodedBody = json_decode($jsonBody, true);
 
-        if ($decodedBody === null) {
-            return;
+        if (! is_array($decodedBody)) {
+            $decodedBody = array();
         }
 
         $request->request->replace($decodedBody);

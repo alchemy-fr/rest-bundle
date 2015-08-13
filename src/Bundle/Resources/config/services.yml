@@ -75,10 +75,15 @@ services:
     arguments:
       - @alchemy_rest.sort_options_factory
 
-  alchemy_rest.response_listener:
-    class: Alchemy\RestBundle\EventListener\ResponseListener
+  alchemy_rest.transform_response_listener:
+    class: Alchemy\RestBundle\EventListener\TransformResponseListener
     arguments:
       - @alchemy_rest.array_transformer
       - @router
+    tags:
+      - { name: kernel.event_subscriber }
+
+  alchemy_rest.encode_response_listener:
+    class: Alchemy\RestBundle\EventListener\EncodeJsonResponseListener
     tags:
       - { name: kernel.event_subscriber }
