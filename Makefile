@@ -10,6 +10,9 @@ phpunit:
 phpcs:
 	vendor/bin/phpcs --standard=psr1,psr2 src
 
+fixcs:
+	vendor/bin/phpcbf --standard=psr1,psr2 src
+
 deps: composer.lock vendor/composer/installed.json
 
 vendor/composer/installed.json:
