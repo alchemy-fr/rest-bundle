@@ -38,7 +38,8 @@ class RestProvider implements ServiceProviderInterface
         });
         $app['alchemy_rest.array_transformer'] = $app->share(function () use ($app) {
             return new ArrayTransformer(
-                $app['alchemy_rest.fractal_manager'], $app['alchemy_rest.transformers_registry']
+                $app['alchemy_rest.fractal_manager'],
+                $app['alchemy_rest.transformers_registry']
             );
         });
 
@@ -54,7 +55,8 @@ class RestProvider implements ServiceProviderInterface
         $app['alchemy_rest.date_parser.format'] = 'Y-m-d H:i:s';
         $app['alchemy_rest.date_parser'] = $app->share(function () use ($app) {
             return new FormatDateParser(
-                $app['alchemy_rest.date_parser.timezone'], $app['alchemy_rest.date_parser.format']
+                $app['alchemy_rest.date_parser.timezone'],
+                $app['alchemy_rest.date_parser.format']
             );
         });
 
