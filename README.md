@@ -97,3 +97,30 @@ class MyController
     }
 }
 ```
+
+### Transforming controller results into JSON responses:
+
+This listener is always activated. To use it, you must first write a Transformer (see the League/Fractal documentation
+for information on transformers), and define it as a tagged service in your dependency injection configuration:
+
+```
+services:
+    my_transformer:
+        class: My\Transformer
+        tags: 
+            - { name: alchemy_rest.transformer, alias: my_transformer }
+```
+
+Then in your routing file, you need to specify the transformer for a given route:
+
+```yml
+my_application.api_route:
+    pattern: /api/route
+    defaults:
+        _fractal: { name: my_transformer, list: false }
+```
+
+You can use the `list` parameter in your route defaults to specifiy whether the controller result should be handled
+as a list or as a simple object. If your controller returns an instance of PagerFanta (you must include the library
+in your project as it is an optional dependency), the response will automatically include a `meta` property containing
+a `pagination` property with the pagination metadata.
