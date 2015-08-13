@@ -24,6 +24,10 @@ class FormatDateParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseInvalidDateReturnsNull($date)
     {
+        if (defined('HHVM_VERSION') && ! is_string($date)) {
+            $this->markTestSkipped('Not necessary with HHVM');
+        }
+
         $parser = new FormatDateParser('UTC', 'Y-m-d H:i:s');
 
         $this->assertNull($parser->parseDate($date));
