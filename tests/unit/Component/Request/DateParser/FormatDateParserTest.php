@@ -35,6 +35,12 @@ class FormatDateParserTest extends \PHPUnit_Framework_TestCase
         $parser = new FormatDateParser('UTC', 'Y-m-d H:i:s');
         $date = $parser->parseDate('2015-08-01 15:25:30');
 
+        if (interface_exists('\DateTimeInterface')) {
+            $this->assertInstanceOf('\DateTimeInterface', $date);
+        } else {
+            $this->assertInstanceOf('\DateTime', $date);
+        }
+
         $this->assertEquals('UTC', $date->getTimezone()->getName());
         $this->assertEquals('1438442730', $date->getTimestamp());
     }

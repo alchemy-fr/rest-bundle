@@ -21,11 +21,15 @@ class FormatDateParser implements DateParser
 
     /**
      * @param $value
-     * @return null|\DateTimeInterface
+     * @return null|\DateTime|\DateTimeInterface
      */
     public function parseDate($value)
     {
-        $date = \DateTimeImmutable::createFromFormat($this->format, $value, $this->timezone);
+        if (class_exists('\DateTimeImmutable')) {
+            $date = \DateTimeImmutable::createFromFormat($this->format, $value, $this->timezone);
+        } else {
+            $date = \DateTime::createFromFormat($this->format, $value, $this->timezone);
+        }
 
         if ($date === false) {
             return null;
