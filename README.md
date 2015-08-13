@@ -13,14 +13,33 @@
 
 Enable the bundle by adding it to the app kernel.
 
-### Available parameters
+By default, all listeners are enabled. You can add the following section to your `config.yml` to alter the behavior
+of the listeners:
 
-The following application parameters allow you to control the behavior of the the bundle:
+*Note* The following configuration matches the default settings
 
-- `alchemy_rest.content_types`: An array of content type names for which to enable exception handling and formatting.
-- `alchemy_rest.date_timezone`: Name of the timezone that will be used to parse date parameters.
-- `alchemy_rest.date_format`: Format string that will be used to parse date parameters. See the PHP documentation of 
-`\DateTime::createFromFormat()` for valid format strings.
+```yml
+alchemy_rest:
+    dates:
+        enabled: true
+        format: Y-m-d H:i:s
+        timezone: UTC
+    exceptions:
+        enabled: true
+        content-types: [ "application/json" ]
+        # Set this to null to use default transformer, or use the key of a service implementing
+        # Alchemy\Rest\Response\ExceptionTransformer
+        transformer: null
+    sort:
+        enabled: true
+        sort_parameter: sort
+        direction_parameter: dir
+        mutli_sort_parameter: sorts
+    pagination:
+        enabled: true
+        limit_parameter: limit
+        offset_parameter: offset
+```
 
 ## Usage
 
