@@ -53,7 +53,7 @@ class ArrayTransformer
 
     /**
      * @param $key
-     * @param $resource
+     * @param mixed $resource
      * @param null|string|array $includes
      * @return array
      */
@@ -85,8 +85,8 @@ class ArrayTransformer
     }
 
     /**
-     * @param $resource
-     * @param null $includes
+     * @param mixed $resource
+     * @param null|string|array $includes
      * @return array
      */
     private function convertResource($resource, $includes = null)
