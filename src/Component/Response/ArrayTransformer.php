@@ -17,7 +17,7 @@ class ArrayTransformer
     private $manager;
 
     /**
-     * @var array
+     * @var TransformerAbstract[]
      */
     private $transformers = array();
 
@@ -30,7 +30,7 @@ class ArrayTransformer
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @param TransformerAbstract $transformer
      */
     public function setTransformer($key, TransformerAbstract $transformer)
@@ -39,8 +39,8 @@ class ArrayTransformer
     }
 
     /**
-     * @param $key
-     * @return array
+     * @param string $key
+     * @return TransformerAbstract
      */
     public function getTransformer($key)
     {
