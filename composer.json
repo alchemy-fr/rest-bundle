@@ -22,6 +22,6 @@
   },
   "require": {
     "league/fractal": "^0.12.0",
-    "willdurand/negotiation": "^1.4"
+    "willdurand/negotiation": "~1.0"
   }
 }
