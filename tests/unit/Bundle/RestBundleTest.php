@@ -4,6 +4,13 @@ namespace Alchemy\RestBundle\Tests;
 
 use Alchemy\RestBundle\RestBundle;
 use Prophecy\Argument;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Symfony\Component\HttpKernel\HttpKernel;
+use Symfony\Component\HttpKernel\Kernel;
 
 class RestBundleTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,5 +38,10 @@ class RestBundleTest extends \PHPUnit_Framework_TestCase
         $bundle = new RestBundle();
 
         $bundle->build($container->reveal());
+    }
+
+    public function testBundleIsInitializedProperlyInKernel()
+    {
+        $this->markTestIncomplete('Implement service definition validation.');
     }
 }

@@ -3,18 +3,33 @@ services:
     class: League\Fractal\Manager
     public: false
 
+  alchemy_rest.transformer_registry:
+    class: Alchemy\Rest\Response\TransformerRegistry
+
   alchemy_rest.array_transformer:
     class: Alchemy\Rest\Response\ArrayTransformer
     arguments:
       - @alchemy_rest.fractal_manager
+      - @alchemy_rest.transformer_registry
+
+  alchemy_rest.negotiator:
+    class: Negotiation\Negotiator
+
+  alchemy_rest.content_type_matcher:
+    class: Alchemy\Rest\Request\ContentTypeMatcher
+    arguments:
+      - @alchemy_rest.negotiator
 
   alchemy_rest.exception_transformer:
     class: Alchemy\Rest\Response\ExceptionTransformer\DefaultExceptionTransformer
     public: false
+    arguments:
+      - false
 
   alchemy_rest.exception_listener:
     class: Alchemy\RestBundle\EventListener\ExceptionListener
     arguments:
+      - @alchemy_rest.content_type_matcher
       - @alchemy_rest.exception_transformer
       - []
 
@@ -23,6 +38,12 @@ services:
     public: false
     arguments:
       - ~
+      - ~
+
+  alchemy_rest.json_body_decode_listener:
+    class: Alchemy\RestBundle\EventListener\DecodeJsonBodyRequestListener
+    arguments:
+      - @alchemy_rest.content_type_matcher
       - ~
 
   alchemy_rest.date_request_listener:

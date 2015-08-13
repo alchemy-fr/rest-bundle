@@ -17,16 +17,16 @@ class TransformerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (! $container->hasDefinition('alchemy_rest.array_transformer')) {
+        if (! $container->hasDefinition('alchemy_rest.transformer_registry')) {
             return;
         }
 
-        $definition = $container->findDefinition('alchemy_rest.array_transformer');
+        $transformerRegistry = $container->findDefinition('alchemy_rest.transformer_registry');
         $transformerTags = $container->findTaggedServiceIds('alchemy_rest.transformer');
 
         foreach ($transformerTags as $id => $tags) {
             foreach ($tags as $tag) {
-                $definition->addMethodCall('setTransformer', array($tag['alias'], new Reference($id)));
+                $transformerRegistry->addMethodCall('setTransformer', array($tag['alias'], new Reference($id)));
             }
         }
     }

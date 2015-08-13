@@ -17,25 +17,18 @@ class ArrayTransformer
     private $manager;
 
     /**
-     * @var TransformerAbstract[]
+     * @var \ArrayAccess
      */
-    private $transformers = array();
+    private $transformers;
 
     /**
      * @param Manager $fractalManager
+     * @param \ArrayAccess $transformerRegistry
      */
-    public function __construct(Manager $fractalManager)
+    public function __construct(Manager $fractalManager, \ArrayAccess $transformerRegistry)
     {
         $this->manager = $fractalManager;
-    }
-
-    /**
-     * @param string $key
-     * @param TransformerAbstract $transformer
-     */
-    public function setTransformer($key, TransformerAbstract $transformer)
-    {
-        $this->transformers[$key] = $transformer;
+        $this->transformers = $transformerRegistry;
     }
 
     /**

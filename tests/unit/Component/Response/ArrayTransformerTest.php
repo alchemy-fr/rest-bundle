@@ -3,6 +3,7 @@
 namespace Alchemy\RestBundle\Tests\Response;
 
 use Alchemy\Rest\Response\ArrayTransformer;
+use Alchemy\Rest\Response\TransformerRegistry;
 use League\Fractal\Manager;
 use League\Fractal\Pagination\PagerfantaPaginatorAdapter;
 use League\Fractal\Resource\Item;
@@ -17,15 +18,17 @@ class ArrayTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTransformerThrowsExceptionOnMissingKeys()
     {
-        $transformer = new ArrayTransformer(new Manager());
+        $transformer = new ArrayTransformer(new Manager(), new TransformerRegistry());
 
         $transformer->getTransformer('missing');
     }
 
     public function testTransformObjectReturnsCorrectArray()
     {
-        $transformer = new ArrayTransformer(new Manager());
-        $transformer->setTransformer('mock', new MockTransformer());
+        $registry = new TransformerRegistry();
+        $transformer = new ArrayTransformer(new Manager(), $registry);
+
+        $registry->setTransformer('mock', new MockTransformer());
 
         $data = $transformer->transform('mock', new \stdClass());
 
@@ -34,8 +37,10 @@ class ArrayTransformerTest extends \PHPUnit_Framework_TestCase
 
     public function testTransformObjectWithIncludesReturnsCorrectArray()
     {
-        $transformer = new ArrayTransformer(new Manager());
-        $transformer->setTransformer('mock', new MockTransformer());
+        $registry = new TransformerRegistry();
+        $transformer = new ArrayTransformer(new Manager(), $registry);
+
+        $registry->setTransformer('mock', new MockTransformer());
 
         $data = $transformer->transform('mock', new \stdClass(), array('child'));
 
@@ -49,8 +54,10 @@ class ArrayTransformerTest extends \PHPUnit_Framework_TestCase
 
     public function testTransformObjectCollectionReturnsCorrectArray()
     {
-        $transformer = new ArrayTransformer(new Manager());
-        $transformer->setTransformer('mock', new MockTransformer());
+        $registry = new TransformerRegistry();
+        $transformer = new ArrayTransformer(new Manager(), $registry);
+
+        $registry->setTransformer('mock', new MockTransformer());
 
         $data = $transformer->transformList('mock', array(new \stdClass()));
 
@@ -60,8 +67,10 @@ class ArrayTransformerTest extends \PHPUnit_Framework_TestCase
 
     public function testTransformObjectCollectionWithIncludesReturnsCorrectArray()
     {
-        $transformer = new ArrayTransformer(new Manager());
-        $transformer->setTransformer('mock', new MockTransformer());
+        $registry = new TransformerRegistry();
+        $transformer = new ArrayTransformer(new Manager(), $registry);
+
+        $registry->setTransformer('mock', new MockTransformer());
 
         $data = $transformer->transformList('mock', array(new \stdClass()), array('child'), null);
 
@@ -81,8 +90,10 @@ class ArrayTransformerTest extends \PHPUnit_Framework_TestCase
             return 'url';
         });
 
-        $transformer = new ArrayTransformer(new Manager());
-        $transformer->setTransformer('mock', new MockTransformer());
+        $registry = new TransformerRegistry();
+        $transformer = new ArrayTransformer(new Manager(), $registry);
+
+        $registry->setTransformer('mock', new MockTransformer());
 
         $data = $transformer->transformList('mock', array(new \stdClass()), array('child'), $pagerAdapter);
 
