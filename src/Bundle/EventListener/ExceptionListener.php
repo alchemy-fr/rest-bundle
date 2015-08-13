@@ -2,11 +2,10 @@
 
 namespace Alchemy\RestBundle\EventListener;
 
+use Alchemy\Rest\Request\ContentTypeMatcher;
 use Alchemy\Rest\Response\ExceptionTransformer;
-use Negotiation\Negotiator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -19,9 +18,9 @@ class ExceptionListener implements EventSubscriberInterface
     private $handledContentTypes;
 
     /**
-     * @var Negotiator
+     * @var ContentTypeMatcher
      */
-    private $contentNegotiator;
+    private $contentTypeMatcher;
 
     /**
      * @var ExceptionTransformer
@@ -29,12 +28,16 @@ class ExceptionListener implements EventSubscriberInterface
     private $exceptionTransformer;
 
     /**
+     * @param ContentTypeMatcher $matcher
      * @param ExceptionTransformer $exceptionTransformer
      * @param array $handledContentTypes
      */
-    public function __construct(ExceptionTransformer $exceptionTransformer = null, array $handledContentTypes = null)
-    {
-        $this->contentNegotiator = new Negotiator();
+    public function __construct(
+        ContentTypeMatcher $matcher,
+        ExceptionTransformer $exceptionTransformer = null,
+        array $handledContentTypes = null
+    ) {
+        $this->contentTypeMatcher = $matcher;
         $this->exceptionTransformer = $exceptionTransformer ?: new ExceptionTransformer\DefaultExceptionTransformer();
         $this->handledContentTypes = $handledContentTypes ?: array('application/json');
     }
@@ -44,7 +47,10 @@ class ExceptionListener implements EventSubscriberInterface
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if (! $this->shouldHandleException($event->getRequest())) {
+        $request = $event->getRequest();
+        $acceptHeader = $request->headers->get('Accept', '*/*');
+
+        if (!$this->contentTypeMatcher->matches($acceptHeader, $this->handledContentTypes)) {
             return;
         }
 
@@ -53,22 +59,6 @@ class ExceptionListener implements EventSubscriberInterface
         $status = $exception instanceof HttpExceptionInterface ? $exception->getStatusCode() : 500;
 
         $event->setResponse(new JsonResponse($data, $status));
-    }
-
-    /**
-     * @param Request $request
-     * @return bool
-     */
-    private function shouldHandleException(Request $request)
-    {
-        $header = $request->headers->get('Accept', '*/*');
-        $format = $this->contentNegotiator->getBest($header, $this->handledContentTypes);
-
-        if ($format && ! in_array($format->getValue(), $this->handledContentTypes, true)) {
-            return false;
-        }
-
-        return true;
     }
 
     public static function getSubscribedEvents()
