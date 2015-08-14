@@ -22,12 +22,18 @@ use Alchemy\RestBundle\EventListener\SortParamRequestListener;
 use Alchemy\RestBundle\EventListener\TransformResponseListener;
 use Alchemy\RestBundle\Rest\Request\PaginationOptionsFactory;
 use Alchemy\RestBundle\Rest\Request\SortOptionsFactory;
+use Alchemy\RestProvider\Middleware\SetDateAttributesMiddlewareFactory;
+use Alchemy\RestProvider\Middleware\SetEncodingAttributeMiddlewareFactory;
+use Alchemy\RestProvider\Middleware\SetPaginationAndSortAttributesMiddlewareFactory;
+use Alchemy\RestProvider\Middleware\SetTransformAttributeMiddlewareFactory;
 use League\Fractal\Manager;
 use Negotiation\Negotiator;
 use Pimple;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class RestProvider implements ServiceProviderInterface
 {
@@ -54,11 +60,43 @@ class RestProvider implements ServiceProviderInterface
         $app['alchemy_rest.encode_response_listener'] = $app->share(function () use ($app) {
             return new EncodeJsonResponseListener();
         });
+
+        $this->registerMiddlewareFactories($app);
+
+        $app['dispatcher'] = $app->share($app->extend('dispatcher', function (EventDispatcherInterface $dispatcher) use ($app) {
+            $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.decode_request_listener'], -1);
+            $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.paginate_request_listener'], -1);
+            $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.sort_request_listener'], -1);
+            $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.date_request_listener'], -1);
+            $dispatcher->addListener(KernelEvents::VIEW, $app['alchemy_rest.transform_response_listener']);
+            $dispatcher->addListener(KernelEvents::VIEW, $app['alchemy_rest.encode_response_listener']);
+
+            return $dispatcher;
+        }));
     }
 
     public function boot(Application $app)
     {
         // Nothing to do.
+    }
+
+    private function registerMiddlewareFactories(Application $app)
+    {
+        $app['alchemy_rest.middleware.parse_date_params'] = $app->share(function () {
+            return new SetDateAttributesMiddlewareFactory();
+        });
+
+        $app['alchemy_rest.middleware.parse_list_params'] = $app->share(function () {
+            return new SetPaginationAndSortAttributesMiddlewareFactory();
+        });
+
+        $app['alchemy_rest.middleware.transform_response'] = $app->share(function () {
+            return new SetTransformAttributeMiddlewareFactory();
+        });
+
+        $app['alchemy_rest.middleware.json_encoder'] = $app->share(function () {
+            return new SetEncodingAttributeMiddlewareFactory();
+        });
     }
 
     private function registerPaginationListener(Application $app)

@@ -8,6 +8,7 @@ use League\Fractal\Pagination\PagerfantaPaginatorAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Router;
@@ -38,7 +39,7 @@ class TransformResponseListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if (!$request->attributes->has('_rest')) {
+        if (!$request->attributes->has('_rest') || $event->getControllerResult() instanceof Response) {
             return;
         }
 
