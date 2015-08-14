@@ -35,6 +35,6 @@ class DefaultExceptionTransformer implements ExceptionTransformer
             $data['trace'] = $exception->getTraceAsString();
         }
 
-        return $data;
+        return array('error' => $data);
     }
 }
