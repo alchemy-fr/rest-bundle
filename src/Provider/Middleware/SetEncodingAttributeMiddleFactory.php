@@ -4,7 +4,7 @@ namespace Alchemy\RestProvider\Middleware;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class EncodingAttributeMiddleFactory
+class SetEncodingAttributeMiddleFactory
 {
 
     public function __invoke($decodeRequest = true, $encodeResponse = true)
