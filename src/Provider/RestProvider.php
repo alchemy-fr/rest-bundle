@@ -34,13 +34,12 @@ class RestProvider implements ServiceProviderInterface
     {
         $app['alchemy_rest.debug'] = false;
 
-
-        $app = $this->registerContentTypeMatcher($app);
-        $app = $this->registerExceptionListener($app);
-        $app = $this->registerDateListener($app);
-        $app = $this->registerPaginationListener($app);
-        $app = $this->registerSortListener($app);
-        $app = $this->registerTransformListener($app);
+        $this->registerContentTypeMatcher($app);
+        $this->registerExceptionListener($app);
+        $this->registerDateListener($app);
+        $this->registerPaginationListener($app);
+        $this->registerSortListener($app);
+        $this->registerTransformListener($app);
 
         $app['alchemy_rest.decode_request_content_types'] = array('application/json');
         $app['alchemy_rest.decode_request_listener'] = $app->share(function () use ($app) {
@@ -57,10 +56,6 @@ class RestProvider implements ServiceProviderInterface
         // Nothing to do.
     }
 
-    /**
-     * @param Application $app
-     * @return Application
-     */
     private function registerPaginationListener(Application $app)
     {
         $app['alchemy_rest.paginate_options.offset_parameter'] = 'offset';
@@ -75,14 +70,8 @@ class RestProvider implements ServiceProviderInterface
         $app['alchemy_rest.paginate_request_listener'] = $app->share(function () use ($app) {
             return new PaginationParamRequestListener($app['alchemy_rest.paginate_options_factory']);
         });
-
-        return $app;
     }
 
-    /**
-     * @param Application $app
-     * @return Application
-     */
     private function registerSortListener(Application $app)
     {
         $app['alchemy_rest.sort_options.sort_parameter'] = 'sort';
@@ -99,14 +88,8 @@ class RestProvider implements ServiceProviderInterface
         $app['alchemy_rest.sort_request_listener'] = $app->share(function () use ($app) {
             return new SortParamRequestListener($app['alchemy_rest.sort_options_factory']);
         });
-
-        return $app;
     }
 
-    /**
-     * @param Application $app
-     * @return Application
-     */
     private function registerDateListener(Application $app)
     {
         $app['alchemy_rest.date_parser.timezone'] = 'UTC';
@@ -121,14 +104,8 @@ class RestProvider implements ServiceProviderInterface
         $app['alchemy_rest.date_request_listener'] = $app->share(function () use ($app) {
             return new DateParamRequestListener($app['alchemy_rest.date_parser']);
         });
-
-        return $app;
     }
 
-    /**
-     * @param Application $app
-     * @return Application
-     */
     private function registerExceptionListener(Application $app)
     {
         $app['alchemy_rest.exception_transformer'] = $app->share(function () use ($app) {
@@ -143,14 +120,8 @@ class RestProvider implements ServiceProviderInterface
                 $app['alchemy_rest.exception_handling_content_types']
             );
         });
-
-        return $app;
     }
 
-    /**
-     * @param Application $app
-     * @return Application
-     */
     private function registerTransformListener(Application $app)
     {
         $app['alchemy_rest.fractal_manager'] = $app->share(function () {
@@ -173,14 +144,8 @@ class RestProvider implements ServiceProviderInterface
                 $app['router']
             );
         });
-
-        return $app;
     }
 
-    /**
-     * @param Application $app
-     * @return Application
-     */
     private function registerContentTypeMatcher(Application $app)
     {
         $app['alchemy_rest.negotiator'] = $app->share(function () use ($app) {
@@ -189,7 +154,5 @@ class RestProvider implements ServiceProviderInterface
         $app['alchemy_rest.content_type_matcher'] = $app->share(function () use ($app) {
             return new ContentTypeMatcher($app['alchemy_rest.negotiator']);
         });
-
-        return $app;
     }
 }
