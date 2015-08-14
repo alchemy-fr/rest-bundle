@@ -2,7 +2,7 @@
 
 namespace Alchemy\Rest\Result;
 
-class ResourceCreatedResult 
+class ResourceCreatedResult
 {
     /**
      * @var mixed

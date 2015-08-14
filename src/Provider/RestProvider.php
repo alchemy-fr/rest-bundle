@@ -54,7 +54,7 @@ class RestProvider implements ServiceProviderInterface
         });
 
         $app['alchemy_rest.request_decoder'] = $app->protect(function (Request $request) use ($app) {
-           $app['alchemy_rest.decode_request_listener']->decodeBody($request);
+            $app['alchemy_rest.decode_request_listener']->decodeBody($request);
         });
 
         $app['alchemy_rest.encode_response_listener'] = $app->share(function () use ($app) {
@@ -63,16 +63,18 @@ class RestProvider implements ServiceProviderInterface
 
         $this->registerMiddlewareFactories($app);
 
-        $app['dispatcher'] = $app->share($app->extend('dispatcher', function (EventDispatcherInterface $dispatcher) use ($app) {
-            $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.decode_request_listener'], -1);
-            $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.paginate_request_listener'], -1);
-            $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.sort_request_listener'], -1);
-            $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.date_request_listener'], -1);
-            $dispatcher->addListener(KernelEvents::VIEW, $app['alchemy_rest.transform_response_listener']);
-            $dispatcher->addListener(KernelEvents::VIEW, $app['alchemy_rest.encode_response_listener']);
+        $app['dispatcher'] = $app->share(
+            $app->extend('dispatcher', function (EventDispatcherInterface $dispatcher) use ($app) {
+                $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.decode_request_listener'], -1);
+                $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.paginate_request_listener'], -1);
+                $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.sort_request_listener'], -1);
+                $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.date_request_listener'], -1);
+                $dispatcher->addListener(KernelEvents::VIEW, $app['alchemy_rest.transform_response_listener']);
+                $dispatcher->addListener(KernelEvents::VIEW, $app['alchemy_rest.encode_response_listener']);
 
-            return $dispatcher;
-        }));
+                return $dispatcher;
+            })
+        );
     }
 
     public function boot(Application $app)

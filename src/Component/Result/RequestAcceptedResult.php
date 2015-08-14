@@ -2,7 +2,7 @@
 
 namespace Alchemy\Rest\Result;
 
-class RequestAcceptedResult 
+class RequestAcceptedResult
 {
     private $metadata;
 

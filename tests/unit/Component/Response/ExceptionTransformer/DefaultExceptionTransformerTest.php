@@ -28,10 +28,13 @@ class DefaultExceptionTransformerTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertNotNull($transformedException);
-        $this->assertArrayHasKey('message', $transformedException);
-        $this->assertEquals($exceptionMessage, $transformedException['message']);
-        $this->assertArrayHasKey('code', $transformedException);
-        $this->assertEquals($exceptionCode, $transformedException['code']);
+
+        $this->assertArrayHasKey('error', $transformedException);
+
+        $this->assertArrayHasKey('message', $transformedException['error']);
+        $this->assertEquals($exceptionMessage, $transformedException['error']['message']);
+        $this->assertArrayHasKey('code', $transformedException['error']);
+        $this->assertEquals($exceptionCode, $transformedException['error']['code']);
     }
 
 
@@ -51,13 +54,16 @@ class DefaultExceptionTransformerTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertNotNull($transformedException);
-        $this->assertArrayHasKey('message', $transformedException);
-        $this->assertEquals($exceptionMessage, $transformedException['message']);
-        $this->assertArrayHasKey('code', $transformedException);
-        $this->assertEquals($exceptionCode, $transformedException['code']);
 
-        $this->assertArrayHasKey('trace', $transformedException);
-        $this->assertArrayHasKey('exception', $transformedException);
-        $this->assertEquals('RuntimeException', $transformedException['exception']);
+        $this->assertArrayHasKey('error', $transformedException);
+
+        $this->assertArrayHasKey('message', $transformedException['error']);
+        $this->assertEquals($exceptionMessage, $transformedException['error']['message']);
+        $this->assertArrayHasKey('code', $transformedException['error']);
+        $this->assertEquals($exceptionCode, $transformedException['error']['code']);
+
+        $this->assertArrayHasKey('trace', $transformedException['error']);
+        $this->assertArrayHasKey('exception', $transformedException['error']);
+        $this->assertEquals('RuntimeException', $transformedException['error']['exception']);
     }
 }
