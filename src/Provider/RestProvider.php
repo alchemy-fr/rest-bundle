@@ -27,6 +27,7 @@ use Negotiation\Negotiator;
 use Pimple;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class RestProvider implements ServiceProviderInterface
 {
@@ -44,6 +45,10 @@ class RestProvider implements ServiceProviderInterface
         $app['alchemy_rest.decode_request_content_types'] = array('application/json');
         $app['alchemy_rest.decode_request_listener'] = $app->share(function () use ($app) {
             return new DecodeJsonBodyRequestListener($app['alchemy_rest.content_type_matcher']);
+        });
+
+        $app['alchemy_rest.request_decoder'] = $app->protect(function (Request $request) use ($app) {
+           $app['alchemy_rest.decode_request_listener']->decodeBody($request);
         });
 
         $app['alchemy_rest.encode_response_listener'] = $app->share(function () use ($app) {
