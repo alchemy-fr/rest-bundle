@@ -64,6 +64,6 @@ class DecodeJsonBodyRequestListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(KernelEvents::REQUEST => array('onKernelRequest', -1));
+        return array(KernelEvents::REQUEST => array('onKernelRequest', -2048));
     }
 }
