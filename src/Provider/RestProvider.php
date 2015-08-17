@@ -209,7 +209,7 @@ class RestProvider implements ServiceProviderInterface
         $app['alchemy_rest.transform_response_listener'] = $app->share(function () use ($app) {
             return new TransformResponseListener(
                 $app['alchemy_rest.array_transformer'],
-                $app['router']
+                $app['url_generator']
             );
         });
     }
