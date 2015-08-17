@@ -22,7 +22,7 @@ class RequestAcceptedListener
         $metadata = $result->getMetadata();
         $response = empty($metadata) ? new Response('', 202) : new JsonResponse($metadata, 202);
 
-        $event->setResponse($response);
+        $event->setControllerResult($response);
     }
 
     public static function getSubscribedEvents()

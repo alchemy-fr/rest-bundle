@@ -18,6 +18,8 @@ use Alchemy\RestBundle\EventListener\DecodeJsonBodyRequestListener;
 use Alchemy\RestBundle\EventListener\EncodeJsonResponseListener;
 use Alchemy\RestBundle\EventListener\ExceptionListener;
 use Alchemy\RestBundle\EventListener\PaginationParamRequestListener;
+use Alchemy\RestBundle\EventListener\RequestAcceptedListener;
+use Alchemy\RestBundle\EventListener\ResourceCreatedListener;
 use Alchemy\RestBundle\EventListener\SortParamRequestListener;
 use Alchemy\RestBundle\EventListener\TransformResponseListener;
 use Alchemy\RestBundle\Rest\Request\PaginationOptionsFactory;
@@ -69,7 +71,9 @@ class RestProvider implements ServiceProviderInterface
                 $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.paginate_request_listener'], -1);
                 $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.sort_request_listener'], -1);
                 $dispatcher->addListener(KernelEvents::REQUEST, $app['alchemy_rest.date_request_listener'], -1);
+                $dispatcher->addListener(KernelEvents::VIEW, $app['alchemy_rest.transform_request_accepted_listener']);
                 $dispatcher->addListener(KernelEvents::VIEW, $app['alchemy_rest.transform_response_listener']);
+                $dispatcher->addListener(KernelEvents::VIEW, $app['alchemy_rest.transform_resource_created_listener']);
                 $dispatcher->addListener(KernelEvents::VIEW, $app['alchemy_rest.encode_response_listener']);
 
                 return $dispatcher;
@@ -181,6 +185,14 @@ class RestProvider implements ServiceProviderInterface
                 $app['alchemy_rest.fractal_manager'],
                 $app['alchemy_rest.transformers_registry']
             );
+        });
+
+        $app['alchemy_rest.transform_request_accepted_listener'] = $app->share(function () {
+            return new RequestAcceptedListener();
+        });
+
+        $app['alchemy_rest.transform_resource_created_listener'] = $app->share(function () use ($app) {
+            return new ResourceCreatedListener($app['alchemy_rest.array_transformer']);
         });
 
         $app['alchemy_rest.transform_response_listener'] = $app->share(function () use ($app) {

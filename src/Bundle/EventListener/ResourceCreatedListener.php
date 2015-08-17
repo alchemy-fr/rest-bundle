@@ -37,7 +37,7 @@ class ResourceCreatedListener implements EventSubscriberInterface
 
         $transformedData['meta'] = array_merge($transformedData['meta'], $result->getMetadata());
 
-        $event->setResponse(new JsonResponse($transformedData, 201));
+        $event->setControllerResult(new JsonResponse($transformedData, 201));
     }
 
     public static function getSubscribedEvents()
