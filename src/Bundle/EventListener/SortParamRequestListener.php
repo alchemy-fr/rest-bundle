@@ -44,7 +44,7 @@ class SortParamRequestListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::REQUEST => array('onKernelRequest')
+            KernelEvents::REQUEST => array('onKernelRequest', -1)
         );
     }
 }

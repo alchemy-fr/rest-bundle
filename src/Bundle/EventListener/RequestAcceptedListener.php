@@ -3,12 +3,13 @@
 namespace Alchemy\RestBundle\EventListener;
 
 use Alchemy\Rest\Result\RequestAcceptedResult;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class RequestAcceptedListener
+class RequestAcceptedListener implements EventSubscriberInterface
 {
 
     public function onKernelView(GetResponseForControllerResultEvent $event)

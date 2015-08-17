@@ -31,6 +31,7 @@ class RestExtension extends ConfigurableExtension
         ));
 
         $loader->load('services.yml');
+        $loader->load('listeners.yml');
 
         $this->configureExceptionListener($config['exceptions'], $container);
         $this->configureDateRequestListener($config, $container);
