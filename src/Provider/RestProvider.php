@@ -72,9 +72,11 @@ class RestProvider implements ServiceProviderInterface
                 $dispatcher->addSubscriber($app['alchemy_rest.paginate_request_listener'], -1);
                 $dispatcher->addSubscriber($app['alchemy_rest.sort_request_listener'], -1);
                 $dispatcher->addSubscriber($app['alchemy_rest.date_request_listener'], -1);
+                $dispatcher->addSubscriber($app['alchemy_rest.transform_success_result_listener']);
                 $dispatcher->addSubscriber($app['alchemy_rest.transform_request_accepted_listener']);
                 $dispatcher->addSubscriber($app['alchemy_rest.transform_response_listener']);
                 $dispatcher->addSubscriber($app['alchemy_rest.transform_resource_created_listener']);
+                $dispatcher->addSubscriber($app['alchemy_rest.transform_bad_request_listener']);
                 $dispatcher->addSubscriber($app['alchemy_rest.encode_response_listener']);
 
                 return $dispatcher;
