@@ -13,6 +13,7 @@ use Alchemy\Rest\Request\ContentTypeMatcher;
 use Alchemy\Rest\Request\DateParser\FormatDateParser;
 use Alchemy\Rest\Response\ArrayTransformer;
 use Alchemy\Rest\Response\ExceptionTransformer\DefaultExceptionTransformer;
+use Alchemy\RestBundle\EventListener\BadRequestListener;
 use Alchemy\RestBundle\EventListener\DateParamRequestListener;
 use Alchemy\RestBundle\EventListener\DecodeJsonBodyRequestListener;
 use Alchemy\RestBundle\EventListener\EncodeJsonResponseListener;
@@ -21,6 +22,7 @@ use Alchemy\RestBundle\EventListener\PaginationParamRequestListener;
 use Alchemy\RestBundle\EventListener\RequestAcceptedListener;
 use Alchemy\RestBundle\EventListener\ResourceCreatedListener;
 use Alchemy\RestBundle\EventListener\SortParamRequestListener;
+use Alchemy\RestBundle\EventListener\SuccessResultListener;
 use Alchemy\RestBundle\EventListener\TransformResponseListener;
 use Alchemy\RestBundle\Rest\Request\PaginationOptionsFactory;
 use Alchemy\RestBundle\Rest\Request\SortOptionsFactory;
@@ -35,7 +37,6 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 class RestProvider implements ServiceProviderInterface
 {
@@ -187,12 +188,20 @@ class RestProvider implements ServiceProviderInterface
             );
         });
 
+        $app['alchemy_rest.transform_bad_request_listener'] = $app->share(function () {
+            return new BadRequestListener();
+        });
+
         $app['alchemy_rest.transform_request_accepted_listener'] = $app->share(function () {
             return new RequestAcceptedListener();
         });
 
         $app['alchemy_rest.transform_resource_created_listener'] = $app->share(function () use ($app) {
             return new ResourceCreatedListener($app['alchemy_rest.array_transformer']);
+        });
+
+        $app['alchemy_rest.transform_success_result_listener'] = $app->share(function () {
+            return new SuccessResultListener();
         });
 
         $app['alchemy_rest.transform_response_listener'] = $app->share(function () use ($app) {
