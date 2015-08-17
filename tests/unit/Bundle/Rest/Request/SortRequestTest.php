@@ -1,6 +1,6 @@
 <?php
 
-namespace Alchemy\RestBundle\Tests\Bundle\Rest;
+namespace Alchemy\RestBundle\Tests\Bundle\Rest\Request;
 
 use Alchemy\Rest\Request\Sort;
 use Alchemy\RestBundle\Rest\Request\SortRequest;

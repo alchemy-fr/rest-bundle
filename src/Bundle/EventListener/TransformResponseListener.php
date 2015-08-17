@@ -7,18 +7,17 @@ use Alchemy\Rest\Response\ArrayTransformer;
 use League\Fractal\Pagination\PagerfantaPaginatorAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TransformResponseListener implements EventSubscriberInterface
 {
     /**
-     * @var Router
+     * @var UrlGeneratorInterface
      */
-    private $router;
+    private $urlGenerator;
 
     /**
      * @var ArrayTransformer
@@ -27,12 +26,12 @@ class TransformResponseListener implements EventSubscriberInterface
 
     /**
      * @param ArrayTransformer $transformer
-     * @param Router $router
+     * @param UrlGeneratorInterface $urlGenerator
      */
-    public function __construct(ArrayTransformer $transformer, Router $router)
+    public function __construct(ArrayTransformer $transformer, UrlGeneratorInterface $urlGenerator)
     {
         $this->transformer = $transformer;
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function onKernelView(GetResponseForControllerResultEvent $event)
@@ -87,7 +86,11 @@ class TransformResponseListener implements EventSubscriberInterface
                 'offset' => max(max($page - 1, 0) * max($limit, 0) - 1, 0)
             ));
 
-            return $this->router->generate($request->attributes->get('_route'), $params);
+            return $this->urlGenerator->generate(
+                $request->attributes->get('_route'),
+                $params,
+                UrlGeneratorInterface::ABSOLUTE_PATH
+            );
         });
     }
 
@@ -101,7 +104,7 @@ class TransformResponseListener implements EventSubscriberInterface
     private function transformResult($config, $data, $includes, $request)
     {
         if ($config['list']) {
-            return  $this->transformer->transformList(
+            return $this->transformer->transformList(
                 $config['transform'],
                 $data,
                 $includes,
