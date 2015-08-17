@@ -28,10 +28,10 @@ class ContentTypeMatcher
     {
         $format = $this->negotiator->getBest($acceptHeader, $acceptedContentTypes);
 
-        if ($format && ! in_array($format->getValue(), $acceptedContentTypes, true)) {
-            return false;
+        if ($format) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 }

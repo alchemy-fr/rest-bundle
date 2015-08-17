@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9c07a08945b156dc777d7d3bcaa474ba",
+    "hash": "d645440ff56bcdb0a5404a0753cb3de4",
     "packages": [
         {
             "name": "league/fractal",
@@ -71,25 +71,25 @@
         },
         {
             "name": "willdurand/negotiation",
-            "version": "1.4.0",
+            "version": "v2.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/willdurand/Negotiation.git",
-                "reference": "8a84c5956e765f432542fc52a8c6e9aff4508eb3"
+                "reference": "d26d6b0fe72465c9f475b4e003cdc34ec6d142b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/8a84c5956e765f432542fc52a8c6e9aff4508eb3",
-                "reference": "8a84c5956e765f432542fc52a8c6e9aff4508eb3",
+                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/d26d6b0fe72465c9f475b4e003cdc34ec6d142b1",
+                "reference": "d26d6b0fe72465c9f475b4e003cdc34ec6d142b1",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.4.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
@@ -104,7 +104,7 @@
             "authors": [
                 {
                     "name": "William Durand",
-                    "email": "william.durand1@gmail.com"
+                    "email": "will+git@drnd.me"
                 }
             ],
             "description": "Content Negotiation tools for PHP provided as a standalone library.",
@@ -116,7 +116,7 @@
                 "header",
                 "negotiation"
             ],
-            "time": "2015-07-28 13:10:50"
+            "time": "2015-07-29 08:17:29"
         }
     ],
     "packages-dev": [
@@ -1909,7 +1909,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "willdurand/negotiation": 15
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
