@@ -34,7 +34,7 @@ class DecodeJsonBodyRequestListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if (! $request->attributes->get('_rest[decode_response]', false, true)) {
+        if (! $request->attributes->get('_rest[decode_request]', false, true)) {
             return;
         }
 
