@@ -1,6 +1,6 @@
 <?php
 
-namespace Alchemy\RestBundle\Response\ExceptionTransformer;
+namespace Alchemy\RestBundle\Rest\Response\ExceptionTransformer;
 
 use Alchemy\Rest\Response\ExceptionTransformer;
 use Symfony\Component\HttpKernel\Exception\HttpException;
