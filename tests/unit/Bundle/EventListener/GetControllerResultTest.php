@@ -20,4 +20,17 @@ abstract class GetControllerResultTest extends \PHPUnit_Framework_TestCase
             $result
         );
     }
+
+    protected function assertHttpResponse($result, $statusCode)
+    {
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $result);
+        $this->assertEquals($statusCode, $result->getStatusCode());
+    }
+
+    protected function assertHttpJsonResponse($result, $statusCode, array $data)
+    {
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\JsonResponse', $result);
+        $this->assertEquals($statusCode, $result->getStatusCode());
+        $this->assertEquals($data, json_decode($result->getContent(), true));
+    }
 }

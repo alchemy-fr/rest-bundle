@@ -19,8 +19,7 @@ class BadRequestListenerTest extends GetControllerResultTest
         /** @var Response $result */
         $result = $event->getControllerResult();
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $result);
-        $this->assertEquals(400, $result->getStatusCode());
+        $this->assertHttpResponse($result, 400);
     }
 
     public function testOnlyBadRequestResultsAreTransformed()
