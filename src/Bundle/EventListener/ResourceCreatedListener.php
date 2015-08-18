@@ -29,13 +29,9 @@ class ResourceCreatedListener implements EventSubscriberInterface
         }
 
         $transformerKey = $request->attributes->get('_rest[transform]', null, true);
+
         $transformedData = $this->transformer->transform($transformerKey, $result->getResource());
-
-        if (! isset($transformedData['meta']) && ! count($result->getMetadata())) {
-            $transformedData['meta'] = array();
-        }
-
-        $transformedData['meta'] = array_merge($transformedData['meta'], $result->getMetadata());
+        $transformedData = $this->setMetadata($transformedData, $result);
 
         $event->setControllerResult(new JsonResponse($transformedData, 201));
     }
@@ -43,5 +39,25 @@ class ResourceCreatedListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(KernelEvents::VIEW => 'onKernelView');
+    }
+
+    /**
+     * @param $transformedData
+     * @param $result
+     * @return mixed
+     */
+    private function setMetadata($transformedData, $result)
+    {
+        if (!isset($transformedData['meta']) && !count($result->getMetadata())) {
+            $transformedData['meta'] = array();
+        }
+
+        $transformedData['meta'] = array_merge($transformedData['meta'], $result->getMetadata());
+
+        if (empty($transformedData['meta'])) {
+            unset($transformedData['meta']);
+        }
+
+        return $transformedData;
     }
 }
