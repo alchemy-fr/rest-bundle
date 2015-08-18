@@ -4,6 +4,7 @@ namespace Alchemy\RestBundle\Tests\EventListener;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 abstract class GetControllerResultTest extends \PHPUnit_Framework_TestCase
@@ -18,6 +19,18 @@ abstract class GetControllerResultTest extends \PHPUnit_Framework_TestCase
             $kernel->reveal(),
             $request, HttpKernelInterface::MASTER_REQUEST,
             $result
+        );
+    }
+
+    protected function getControllerExceptionEvent(\Exception $exception)
+    {
+        $kernel = $this->prophesize('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $request = new Request();
+
+        return new GetResponseForExceptionEvent(
+            $kernel->reveal(),
+            $request, HttpKernelInterface::MASTER_REQUEST,
+            $exception
         );
     }
 
