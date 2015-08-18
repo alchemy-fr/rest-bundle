@@ -11,7 +11,8 @@
     "psr-4": {
       "Alchemy\\Rest\\": "src/Component",
       "Alchemy\\RestBundle\\": "src/Bundle",
-      "Alchemy\\RestProvider\\": "src/Provider"
+      "Alchemy\\RestProvider\\": "src/Provider",
+      "Alchemy\\RestBundle\\Tests\\": "tests/unit/Bundle"
     }
   },
   "license": "MIT",
