@@ -4,6 +4,7 @@ namespace Alchemy\RestBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -18,11 +19,15 @@ class EncodeJsonResponseListener implements EventSubscriberInterface
 
         $result = $event->getControllerResult();
 
-        if (! is_array($result)) {
-            throw new \LogicException('Invalid controller result: array was expected.');
+        if (! $result instanceof Response) {
+            if (!is_array($result)) {
+                throw new \LogicException('Invalid controller result: array was expected.');
+            }
+
+            $result = new JsonResponse($result);
         }
 
-        $event->setResponse(new JsonResponse($result));
+        $event->setResponse($result);
     }
 
     public static function getSubscribedEvents()
