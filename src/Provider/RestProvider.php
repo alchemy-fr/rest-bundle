@@ -36,6 +36,7 @@ use Pimple;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class RestProvider implements ServiceProviderInterface
@@ -68,20 +69,32 @@ class RestProvider implements ServiceProviderInterface
 
         $app['dispatcher'] = $app->share(
             $app->extend('dispatcher', function (EventDispatcherInterface $dispatcher) use ($app) {
-                $dispatcher->addSubscriber($app['alchemy_rest.decode_request_listener']);
-                $dispatcher->addSubscriber($app['alchemy_rest.paginate_request_listener']);
-                $dispatcher->addSubscriber($app['alchemy_rest.sort_request_listener']);
-                $dispatcher->addSubscriber($app['alchemy_rest.date_request_listener']);
-                $dispatcher->addSubscriber($app['alchemy_rest.transform_success_result_listener']);
-                $dispatcher->addSubscriber($app['alchemy_rest.transform_request_accepted_listener']);
-                $dispatcher->addSubscriber($app['alchemy_rest.transform_resource_created_listener']);
+                $this->bindRequestListeners($app, $dispatcher);
+                $this->bindResultListeners($app, $dispatcher);
+
+                // This block must be called after all other result listeners
                 $dispatcher->addSubscriber($app['alchemy_rest.transform_response_listener']);
-                $dispatcher->addSubscriber($app['alchemy_rest.transform_bad_request_listener']);
                 $dispatcher->addSubscriber($app['alchemy_rest.encode_response_listener']);
 
                 return $dispatcher;
             })
         );
+    }
+
+    private function bindRequestListeners(Application $app, EventDispatcherInterface $dispatcher)
+    {
+        $dispatcher->addSubscriber($app['alchemy_rest.decode_request_listener']);
+        $dispatcher->addSubscriber($app['alchemy_rest.paginate_request_listener']);
+        $dispatcher->addSubscriber($app['alchemy_rest.sort_request_listener']);
+        $dispatcher->addSubscriber($app['alchemy_rest.date_request_listener']);
+    }
+
+    private function bindResultListeners(Application $app, EventDispatcherInterface $dispatcher)
+    {
+        $dispatcher->addSubscriber($app['alchemy_rest.transform_success_result_listener']);
+        $dispatcher->addSubscriber($app['alchemy_rest.transform_request_accepted_listener']);
+        $dispatcher->addSubscriber($app['alchemy_rest.transform_resource_created_listener']);
+        $dispatcher->addSubscriber($app['alchemy_rest.transform_bad_request_listener']);
     }
 
     public function boot(Application $app)
