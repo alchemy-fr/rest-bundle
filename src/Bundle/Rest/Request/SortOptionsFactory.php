@@ -69,7 +69,12 @@ class SortOptionsFactory
             $multisortName => null
         );
 
-        $optionsResolver->setDefined(array_merge(array_keys($keys), array_keys($options)));
+        // BC with symfony < 2.6
+        if (method_exists($optionsResolver, 'setDefined')) {
+            $optionsResolver->setDefined(array_merge(array_keys($keys), array_keys($options)));
+        } else {
+            $optionsResolver->setOptional(array_merge(array_keys($keys), array_keys($options)));
+        }
         $optionsResolver->setDefaults($keys);
 
         $optionsResolver->setAllowedValues($directionName, array(
