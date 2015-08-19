@@ -13,5 +13,5 @@ interface SortOptions
      * @param array $sortMap
      * @return Sort[]
      */
-    public function getSorts(array $sortMap);
+    public function getSorts(array $sortMap = array());
 }
