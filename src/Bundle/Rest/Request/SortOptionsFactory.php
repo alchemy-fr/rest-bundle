@@ -77,12 +77,14 @@ class SortOptionsFactory
         }
         $optionsResolver->setDefaults($keys);
 
-        $optionsResolver->setAllowedValues($directionName, array(
-            strtoupper(SortOptions::SORT_ASC),
-            strtolower(SortOptions::SORT_ASC),
-            strtoupper(SortOptions::SORT_DESC),
-            strtolower(SortOptions::SORT_DESC),
-            null
+        $optionsResolver->setAllowedValues(array(
+            $directionName => array(
+                strtoupper(SortOptions::SORT_ASC),
+                strtolower(SortOptions::SORT_ASC),
+                strtoupper(SortOptions::SORT_DESC),
+                strtolower(SortOptions::SORT_DESC),
+                null
+            )
         ));
 
         return $optionsResolver;
