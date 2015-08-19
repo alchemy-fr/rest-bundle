@@ -72,20 +72,28 @@ class SortOptionsFactory
         // BC with symfony < 2.6
         if (method_exists($optionsResolver, 'setDefined')) {
             $optionsResolver->setDefined(array_merge(array_keys($keys), array_keys($options)));
-        } else {
-            $optionsResolver->setOptional(array_merge(array_keys($keys), array_keys($options)));
-        }
-        $optionsResolver->setDefaults($keys);
 
-        $optionsResolver->setAllowedValues(array(
-            $directionName => array(
+            $optionsResolver->setAllowedValues($directionName, array(
                 strtoupper(SortOptions::SORT_ASC),
                 strtolower(SortOptions::SORT_ASC),
                 strtoupper(SortOptions::SORT_DESC),
                 strtolower(SortOptions::SORT_DESC),
                 null
-            )
-        ));
+            ));
+        } else {
+            $optionsResolver->setOptional(array_merge(array_keys($keys), array_keys($options)));
+
+            $optionsResolver->setAllowedValues(array(
+                $directionName => array(
+                    strtoupper(SortOptions::SORT_ASC),
+                    strtolower(SortOptions::SORT_ASC),
+                    strtoupper(SortOptions::SORT_DESC),
+                    strtolower(SortOptions::SORT_DESC),
+                    null
+                )
+            ));
+        }
+        $optionsResolver->setDefaults($keys);
 
         return $optionsResolver;
     }
