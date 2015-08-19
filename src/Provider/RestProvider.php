@@ -72,6 +72,8 @@ class RestProvider implements ServiceProviderInterface
                 $this->bindRequestListeners($app, $dispatcher);
                 $this->bindResultListeners($app, $dispatcher);
 
+                // Bind exception
+                $dispatcher->addSubscriber($app['alchemy_rest.exception_listener']);
                 // This block must be called after all other result listeners
                 $dispatcher->addSubscriber($app['alchemy_rest.transform_response_listener']);
                 $dispatcher->addSubscriber($app['alchemy_rest.encode_response_listener']);
