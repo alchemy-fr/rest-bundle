@@ -73,14 +73,16 @@ class TransformResponseListener implements EventSubscriberInterface
             return null;
         }
 
-        $pagination = $request->attributes->get('_pagination');
+        $pagination = $request->attributes->get('pagination');
 
         if (!$pagination instanceof PaginationOptions) {
             return null;
         }
 
-        return new PagerfantaPaginatorAdapter($data, function ($page) use ($request, $pagination) {
-            $limit = $pagination->getLimit();
+        $limit = $pagination->getLimit();
+
+        $routeGenerator = function ($page) use ($request, $limit) {
+            // Calculation is necessary since requested page is not
             $params = array_merge($request->query->all(), $request->attributes->get('_route_params', array()), array(
                 'limit' => $limit,
                 'offset' => max(max($page - 1, 0) * max($limit, 0) - 1, 0)
@@ -91,7 +93,9 @@ class TransformResponseListener implements EventSubscriberInterface
                 $params,
                 UrlGeneratorInterface::ABSOLUTE_PATH
             );
-        });
+        };
+
+        return new PagerfantaPaginatorAdapter($data, $routeGenerator);
     }
 
     /**

@@ -28,6 +28,9 @@ class SortParamRequestListenerTest extends ListenerTest
 
         $listener->onKernelRequest($event);
 
-        $this->assertTrue($event->getRequest()->attributes->has('sort'));
+        $sort = $event->getRequest()->attributes->get('sort', null);
+
+        $this->assertNotNull($sort);
+        $this->assertInstanceOf('Alchemy\Rest\Request\SortOptions', $sort);
     }
 }
