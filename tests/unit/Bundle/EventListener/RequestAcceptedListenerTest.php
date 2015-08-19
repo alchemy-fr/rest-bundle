@@ -5,7 +5,7 @@ namespace Alchemy\RestBundle\Tests\EventListener;
 use Alchemy\Rest\Result\RequestAcceptedResult;
 use Alchemy\RestBundle\EventListener\RequestAcceptedListener;
 
-class RequestAcceptedListenerTest extends GetControllerResultTest
+class RequestAcceptedListenerTest extends ListenerTest
 {
 
     public function testEmptyRequestAcceptedResultsAreConvertedToDemandAcceptedHttpResponses()

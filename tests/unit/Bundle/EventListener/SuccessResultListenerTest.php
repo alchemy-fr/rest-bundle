@@ -6,7 +6,7 @@ use Alchemy\Rest\Result\BadRequestResult;
 use Alchemy\Rest\Result\SuccessResult;
 use Alchemy\RestBundle\EventListener\SuccessResultListener;
 
-class SuccessResultListenerTest extends GetControllerResultTest
+class SuccessResultListenerTest extends ListenerTest
 {
 
     public function testEmptySuccessResultsAreConvertedToHttpNoContentResponses()

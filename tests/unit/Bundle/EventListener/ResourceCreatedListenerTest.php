@@ -6,7 +6,7 @@ use Alchemy\Rest\Result\BadRequestResult;
 use Alchemy\Rest\Result\ResourceCreatedResult;
 use Alchemy\RestBundle\EventListener\ResourceCreatedListener;
 
-class ResourceCreatedListenerTest extends GetControllerResultTest
+class ResourceCreatedListenerTest extends ListenerTest
 {
 
     public function testResourceCreatedResultsAreConvertedToJsonResponses()

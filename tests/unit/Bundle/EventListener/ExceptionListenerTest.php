@@ -6,7 +6,7 @@ use Alchemy\Rest\Request\ContentTypeMatcher;
 use Alchemy\RestBundle\EventListener\ExceptionListener;
 use Prophecy\Argument;
 
-class ExceptionListenerTest extends GetControllerResultTest
+class ExceptionListenerTest extends ListenerTest
 {
 
     public function testExceptionsAreConvertedToHttpResponses()

@@ -7,7 +7,7 @@ use Alchemy\Rest\Result\SuccessResult;
 use Alchemy\RestBundle\EventListener\BadRequestListener;
 use Symfony\Component\HttpFoundation\Response;
 
-class BadRequestListenerTest extends GetControllerResultTest
+class BadRequestListenerTest extends ListenerTest
 {
     public function testBadRequestResultsAreConvertedToHttpResponses()
     {
