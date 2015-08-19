@@ -11,7 +11,11 @@
     "psr-4": {
       "Alchemy\\Rest\\": "src/Component",
       "Alchemy\\RestBundle\\": "src/Bundle",
-      "Alchemy\\RestProvider\\": "src/Provider",
+      "Alchemy\\RestProvider\\": "src/Provider"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
       "Alchemy\\RestBundle\\Tests\\": "tests/unit/Bundle"
     }
   },
