@@ -35,7 +35,7 @@ class SortParamRequestListener implements EventSubscriberInterface
         }
 
         if (! is_array($config)) {
-            return;
+            $config = array();
         }
 
         $request->attributes->set('sort', $this->factory->create($request->query->all(), $config));
