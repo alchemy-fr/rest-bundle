@@ -29,7 +29,7 @@
   },
   "require": {
     "league/fractal": "^0.12.0",
-    "willdurand/negotiation": "~2.0@dev
+    "willdurand/negotiation": "~2.0@dev"
   },
   "extra": {
     "branch-alias": {
