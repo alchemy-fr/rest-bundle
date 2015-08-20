@@ -2,7 +2,38 @@
 
 namespace Alchemy\RestBundle\Tests\EventListener;
 
-class RequestMatchingExceptionListenerTest 
+use Alchemy\RestBundle\EventListener\RequestMatchingExceptionListener;
+use Prophecy\Argument;
+
+class RequestMatchingExceptionListenerTest extends ListenerTest
 {
 
+    public function testDecoratedExceptionListenerIsNotCalledWhenRequestDoesNotMatch()
+    {
+        $decoratedListener = $this->prophesize('Alchemy\RestBundle\EventListener\ExceptionListener');
+        $matcher = $this->prophesize('Symfony\Component\HttpFoundation\RequestMatcherInterface');
+
+        $decoratedListener->onKernelException(Argument::any())->shouldNotBeCalled();
+        $matcher->matches(Argument::any())->willReturn(false);
+
+        $event = $this->getControllerExceptionEvent(new \Exception());
+        $listener = new RequestMatchingExceptionListener($decoratedListener->reveal(), $matcher->reveal());
+
+        $listener->onKernelException($event);
+    }
+
+    public function testDecoratedExceptionIsCalledWhenRequestMatches()
+    {
+        $event = $this->getControllerExceptionEvent(new \Exception());
+
+        $decoratedListener = $this->prophesize('Alchemy\RestBundle\EventListener\ExceptionListener');
+        $matcher = $this->prophesize('Symfony\Component\HttpFoundation\RequestMatcherInterface');
+
+        $decoratedListener->onKernelException(Argument::exact($event))->shouldBeCalled();
+        $matcher->matches(Argument::any())->willReturn(true);
+
+        $listener = new RequestMatchingExceptionListener($decoratedListener->reveal(), $matcher->reveal());
+
+        $listener->onKernelException($event);
+    }
 }
