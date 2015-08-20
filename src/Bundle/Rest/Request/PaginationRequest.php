@@ -37,7 +37,7 @@ class PaginationRequest implements PaginationOptions
      */
     public function getOffset($defaultValue = null)
     {
-        return $this->offset > 0 || $defaultValue === null ? $this->offset : (int) $defaultValue;
+        return ($this->offset > 0 || $defaultValue === null) ? $this->offset : (int) $defaultValue;
     }
 
     /**
@@ -46,7 +46,7 @@ class PaginationRequest implements PaginationOptions
      */
     public function getLimit($defaultValue = null)
     {
-        return $this->limit > 0 || $defaultValue === null ? $this->limit : (int) $defaultValue;
+        return ($this->limit > 0 || $defaultValue === null) ? $this->limit : (int) $defaultValue;
     }
 
     /**
