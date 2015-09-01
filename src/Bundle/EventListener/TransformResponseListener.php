@@ -85,7 +85,7 @@ class TransformResponseListener implements EventSubscriberInterface
             // Calculation is necessary since requested page is not
             $params = array_merge($request->query->all(), $request->attributes->get('_route_params', array()), array(
                 'limit' => $limit,
-                'offset' => max(max($page - 1, 0) * max($limit, 0) - 1, 0)
+                'offset' => max($page - 1, 0) * max($limit, 0)
             ));
 
             return $this->urlGenerator->generate(
