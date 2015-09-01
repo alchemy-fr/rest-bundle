@@ -56,4 +56,26 @@ class PaginationRequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(-1, $request->getOffset());
     }
+
+    /**
+     * @dataProvider providesPageComputation
+     */
+    public function testItProperlyComputeCurrentPage($offset, $limit, $page)
+    {
+        $request = new PaginationRequest($offset, $limit);
+
+        $this->assertEquals($page, $request->getCurrentPage($limit));
+    }
+
+    public function providesPageComputation()
+    {
+        return [
+            [0, 10, 1],
+            [9, 10, 1],
+            [10, 10, 2],
+            [15, 10, 2],
+            [29, 15, 2],
+            [30, 15, 3],
+        ];
+    }
 }
