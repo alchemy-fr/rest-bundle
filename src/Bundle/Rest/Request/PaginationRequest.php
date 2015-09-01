@@ -55,6 +55,6 @@ class PaginationRequest implements PaginationOptions
      */
     public function getCurrentPage($defaultPageSize = 10)
     {
-        return (floor(($this->getOffset(0) + 1) / max(1, $this->getLimit($defaultPageSize)) + 1));
+        return (int)floor($this->getOffset(0) / max(1, $this->getLimit($defaultPageSize))) + 1;
     }
 }
