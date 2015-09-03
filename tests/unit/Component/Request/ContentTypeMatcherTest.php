@@ -14,6 +14,7 @@ class ContentTypeMatcherTest extends \PHPUnit_Framework_TestCase
             array('text/html'),
             array('text/xml'),
             array('application/json'),
+            array('application/json;charset=UTF-8'),
             array('application/vnd.api+json'),
         );
     }
@@ -37,7 +38,9 @@ class ContentTypeMatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testMatchExactContentTypesAcceptsIt($contentType)
     {
+        $matcher = new ContentTypeMatcher();
 
+        $this->assertTrue($matcher->matches($contentType, array($contentType)));
     }
 
     public function testMatchingContentTypeNotInWhitelistRejectsIt()
@@ -45,5 +48,12 @@ class ContentTypeMatcherTest extends \PHPUnit_Framework_TestCase
         $matcher = new ContentTypeMatcher();
 
         $this->assertFalse($matcher->matches('text/plain', array('application/json')));
+    }
+
+    public function testFirefoxContentTypeIssue()
+    {
+        $matcher = new ContentTypeMatcher();
+
+        $this->assertTrue($matcher->matches('application/json; charset=UTF-8', array('application/json')));
     }
 }

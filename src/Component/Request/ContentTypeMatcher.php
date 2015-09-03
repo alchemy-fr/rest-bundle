@@ -26,6 +26,11 @@ class ContentTypeMatcher
      */
     public function matches($acceptHeader, array $acceptedContentTypes)
     {
+        // This is in case the submitted header is not standards compliant
+        if (strpos($acceptHeader, ';')) {
+            list($acceptHeader, ) = explode(';', $acceptHeader);
+        }
+
         $format = $this->negotiator->getBest($acceptHeader, $acceptedContentTypes);
 
         if ($format) {
