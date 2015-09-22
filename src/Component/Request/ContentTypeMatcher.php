@@ -26,6 +26,10 @@ class ContentTypeMatcher
      */
     public function matches($acceptHeader, array $acceptedContentTypes)
     {
+        if (empty($acceptHeader)) {
+            return false;
+        }
+
         // This is in case the submitted header is not standards compliant
         if (strpos($acceptHeader, ';')) {
             list($acceptHeader, ) = explode(';', $acceptHeader);

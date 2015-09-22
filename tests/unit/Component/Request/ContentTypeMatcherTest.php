@@ -56,4 +56,11 @@ class ContentTypeMatcherTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($matcher->matches('application/json; charset=UTF-8', array('application/json')));
     }
+
+    public function testMatchEmptyContentTypeReturnsFalse()
+    {
+        $matcher = new ContentTypeMatcher();
+
+        $this->assertFalse($matcher->matches('', array('text/html')));
+    }
 }

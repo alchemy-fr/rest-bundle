@@ -48,7 +48,7 @@ class DecodeJsonBodyRequestListener implements EventSubscriberInterface
     {
         $acceptHeader = $request->headers->get('Content-Type', '*/*');
 
-        if (empty($acceptHeader) || !$this->contentTypeMatcher->matches($acceptHeader, $this->contentTypes)) {
+        if (!$this->contentTypeMatcher->matches($acceptHeader, $this->contentTypes)) {
             return;
         }
 

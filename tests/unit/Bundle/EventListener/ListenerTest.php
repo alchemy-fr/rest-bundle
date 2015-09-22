@@ -37,10 +37,10 @@ abstract class ListenerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function getResponseEvent()
+    protected function getResponseEvent($content = null)
     {
         $kernel = $this->prophesize('Symfony\Component\HttpKernel\HttpKernelInterface');
-        $request = new Request();
+        $request = new Request(array(), array(), array(), array(), array(), array(), $content);
 
         return new GetResponseEvent(
             $kernel->reveal(),
