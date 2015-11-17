@@ -57,7 +57,7 @@ class RestExtension extends ConfigurableExtension
             $listenerDefinition->replaceArgument(0, new Reference($config['transformer']));
         }
 
-        $listenerDefinition->replaceArgument(1, $config['content_types']);
+        $listenerDefinition->replaceArgument(2, $config['content_types']);
     }
 
     /**
