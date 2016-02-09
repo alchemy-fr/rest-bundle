@@ -50,7 +50,7 @@ class RestExtensionTest extends \PHPUnit_Framework_TestCase
         ));
 
         $exceptionListener = new Definition();
-        $exceptionListener->setArguments(array(null, null));
+        $exceptionListener->setArguments(array(null, null, null));
 
         $container = $this->prophesize(self::CONTAINER_CLASS);
         $container->addResource(Argument::any())->shouldBeCalled();
@@ -64,7 +64,7 @@ class RestExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->load($config, $container->reveal());
 
         $this->assertEquals('transformer_reference', (string) $exceptionListener->getArgument(0));
-        $this->assertEquals(array('text/dummy'), $exceptionListener->getArgument(1));
+        $this->assertEquals(array('text/dummy'), $exceptionListener->getArgument(2));
     }
 
     public function testExceptionListenerTransformerArgumentIsNotReplacedWhenTransformerParameterIsNull()
@@ -81,7 +81,7 @@ class RestExtensionTest extends \PHPUnit_Framework_TestCase
         ));
 
         $exceptionListener = new Definition();
-        $exceptionListener->setArguments(array(new Reference('transformer'), null));
+        $exceptionListener->setArguments(array(new Reference('transformer'), null, null));
 
         $container = $this->prophesize(self::CONTAINER_CLASS);
         $container->addResource(Argument::any())->shouldBeCalled();
@@ -95,7 +95,7 @@ class RestExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->load($config, $container->reveal());
 
         $this->assertEquals('transformer', (string) $exceptionListener->getArgument(0));
-        $this->assertEquals(array('text/dummy'), $exceptionListener->getArgument(1));
+        $this->assertEquals(array('text/dummy'), $exceptionListener->getArgument(2));
     }
 
     public function testDateParserArgumentsAreReplacedWhenDateListenerIsEnabled()
