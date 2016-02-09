@@ -23,14 +23,12 @@ class RestProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testItCanBeRegisteredAndBooted()
     {
-        $this->markTestSkipped('See you later, alligator !');
-
-        $sut = new RestProvider();
-
+        $restProvider = new RestProvider();
         $app = new Application();
+
         $defaultServices = $app->keys();
 
-        $app->register($sut);
+        $app->register($restProvider);
         $app->boot();
 
         $definedByProvider = array_values(array_diff($app->keys(), $defaultServices));
@@ -55,9 +53,11 @@ class RestProviderTest extends \PHPUnit_Framework_TestCase
             'alchemy_rest.sort_options.multi_sort_parameter',
             'alchemy_rest.sort_options_factory',
             'alchemy_rest.sort_request_listener',
-            'alchemy_rest.response_listener',
+            'alchemy_rest.transform_response_listener',
         ];
 
-        $this->assertEquals($expectedServices, $definedByProvider);
+        $undefinedServices = array_diff($expectedServices, $definedByProvider);
+
+        $this->assertEquals([], $undefinedServices);
     }
 }
