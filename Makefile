@@ -5,7 +5,7 @@ VALIDATE = $(shell composer validate 2>&1 | grep -q "lock file" && echo "compose
 test: deps phpunit phpcs
 
 phpunit:
-	vendor/bin/phpunit --coverage-text --coverage-clover=tests/output/coverage.clover
+	vendor/bin/phpunit --coverage-text --coverage-clover=tests/output/coverage.clover -v
 
 phpcs:
 	vendor/bin/phpcs --standard=psr1,psr2 src
