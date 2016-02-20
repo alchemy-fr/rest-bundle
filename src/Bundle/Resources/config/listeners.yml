@@ -3,8 +3,8 @@ services:
   alchemy_rest.exception_listener:
     class: Alchemy\RestBundle\EventListener\ExceptionListener
     arguments:
-      - @alchemy_rest.content_type_matcher
-      - @alchemy_rest.exception_transformer
+      - "@alchemy_rest.content_type_matcher"
+      - "@alchemy_rest.exception_transformer"
       - []
     tags:
       - { name: kernel.event_subscriber }
@@ -12,7 +12,7 @@ services:
   alchemy_rest.json_body_decode_listener:
     class: Alchemy\RestBundle\EventListener\DecodeJsonBodyRequestListener
     arguments:
-      - @alchemy_rest.content_type_matcher
+      - "@alchemy_rest.content_type_matcher"
       - ~
     tags:
       - { name: kernel.event_subscriber }
@@ -20,41 +20,41 @@ services:
   alchemy_rest.date_request_listener:
     class: Alchemy\RestBundle\EventListener\DateParamRequestListener
     arguments:
-      - @alchemy_rest.date_parser
+      - "@alchemy_rest.date_parser"
     tags:
       - { name: kernel.event_subscriber }
 
   alchemy_rest.paginate_request_listener:
     class: Alchemy\RestBundle\EventListener\PaginationParamRequestListener
     arguments:
-      - @alchemy_rest.paginate_options_factory
+      - "@alchemy_rest.paginate_options_factory"
     tags:
       - { name: kernel.event_subscriber }
 
   alchemy_rest.sort_request_listener:
     class: Alchemy\RestBundle\EventListener\SortParamRequestListener
     arguments:
-      - @alchemy_rest.sort_options_factory
+      - "@alchemy_rest.sort_options_factory"
     tags:
       - { name: kernel.event_subscriber }
 
   alchemy_rest.transform_resource_created_listener:
     class: Alchemy\RestBundle\EventListener\ResourceCreatedListener
     arguments:
-      - @alchemy_rest.array_transformer
+      - "@alchemy_rest.array_transformer"
     tags:
       - { name: kernel.event_subscriber }
 
   alchemy_rest.transform_request_accepted_listener:
     class: Alchemy\RestBundle\EventListener\RequestAcceptedListener
     tags:
-          - { name: kernel.event_subscriber }
+      - { name: kernel.event_subscriber }
 
   alchemy_rest.transform_response_listener:
     class: Alchemy\RestBundle\EventListener\TransformResponseListener
     arguments:
-      - @alchemy_rest.array_transformer
-      - @router
+      - "@alchemy_rest.array_transformer"
+      - "@router"
     tags:
       - { name: kernel.event_subscriber }
 
