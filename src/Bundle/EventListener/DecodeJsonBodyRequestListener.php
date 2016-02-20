@@ -33,8 +33,9 @@ class DecodeJsonBodyRequestListener implements EventSubscriberInterface
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+        $restAttributes = $request->attributes->get('_rest', []);
 
-        if (! $request->attributes->get('_rest[decode_request]', false, true)) {
+        if (! isset($restAttributes['decode_request']) || ! $restAttributes['decode_request']) {
             return;
         }
 
