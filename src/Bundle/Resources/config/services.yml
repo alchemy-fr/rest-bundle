@@ -9,8 +9,8 @@ services:
   alchemy_rest.array_transformer:
     class: Alchemy\Rest\Response\ArrayTransformer
     arguments:
-      - @alchemy_rest.fractal_manager
-      - @alchemy_rest.transformer_registry
+      - "@alchemy_rest.fractal_manager"
+      - "@alchemy_rest.transformer_registry"
 
   alchemy_rest.negotiator:
     class: Negotiation\Negotiator
@@ -18,7 +18,7 @@ services:
   alchemy_rest.content_type_matcher:
     class: Alchemy\Rest\Request\ContentTypeMatcher
     arguments:
-      - @alchemy_rest.negotiator
+      - "@alchemy_rest.negotiator"
 
   alchemy_rest.exception_transformer:
     class: Alchemy\Rest\Response\ExceptionTransformer\DefaultExceptionTransformer
