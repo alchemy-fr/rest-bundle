@@ -28,6 +28,7 @@
     "squizlabs/php_codesniffer": "^2.3"
   },
   "require": {
+    "php": ">=5.4",
     "league/fractal": "^0.12.0",
     "willdurand/negotiation": "~2.0@dev"
   },

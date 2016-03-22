@@ -4,9 +4,15 @@ namespace Alchemy\RestBundle\Tests\EventListener;
 
 use Alchemy\RestBundle\EventListener\DateParamRequestListener;
 use Prophecy\Argument;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class DateParamRequestListenerTest extends ListenerTest
 {
+
+    public function testListenerSubscribesToKernelRequestEvents()
+    {
+        $this->assertArrayHasKey(KernelEvents::REQUEST, DateParamRequestListener::getSubscribedEvents());
+    }
 
     public function testRequestsWithoutDateAttributesAreIgnored()
     {

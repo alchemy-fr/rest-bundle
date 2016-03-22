@@ -6,9 +6,16 @@ use Alchemy\Rest\Result\BadRequestResult;
 use Alchemy\Rest\Result\SuccessResult;
 use Alchemy\RestBundle\EventListener\BadRequestListener;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class BadRequestListenerTest extends ListenerTest
 {
+
+    public function testListenerSubscribesToKernelViewEvents()
+    {
+        $this->assertArrayHasKey(KernelEvents::VIEW, BadRequestListener::getSubscribedEvents());
+    }
+
     public function testBadRequestResultsAreConvertedToHttpResponses()
     {
         $event = $this->getControllerResultEvent(new BadRequestResult());

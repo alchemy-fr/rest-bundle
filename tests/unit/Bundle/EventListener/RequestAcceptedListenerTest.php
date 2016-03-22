@@ -5,9 +5,15 @@ namespace Alchemy\RestBundle\Tests\EventListener;
 use Alchemy\Rest\Result\BadRequestResult;
 use Alchemy\Rest\Result\RequestAcceptedResult;
 use Alchemy\RestBundle\EventListener\RequestAcceptedListener;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class RequestAcceptedListenerTest extends ListenerTest
 {
+
+    public function testListenerSubscribesToKernelViewEvents()
+    {
+        $this->assertArrayHasKey(KernelEvents::VIEW, RequestAcceptedListener::getSubscribedEvents());
+    }
 
     public function testEmptyRequestAcceptedResultsAreConvertedToDemandAcceptedHttpResponses()
     {

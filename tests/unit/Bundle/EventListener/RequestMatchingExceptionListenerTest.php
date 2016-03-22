@@ -4,9 +4,15 @@ namespace Alchemy\RestBundle\Tests\EventListener;
 
 use Alchemy\RestBundle\EventListener\RequestMatchingExceptionListener;
 use Prophecy\Argument;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class RequestMatchingExceptionListenerTest extends ListenerTest
 {
+
+    public function testListenerSubscribesToKernelExceptionEvents()
+    {
+        $this->assertArrayHasKey(KernelEvents::EXCEPTION, RequestMatchingExceptionListener::getSubscribedEvents());
+    }
 
     public function testDecoratedExceptionListenerIsNotCalledWhenRequestDoesNotMatch()
     {

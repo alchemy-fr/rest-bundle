@@ -21,9 +21,9 @@
         </whitelist>
     </filter>
     <logging>
-        <log type="coverage-html" target="./tests/output/Coverage/"
+        <log type="coverage-html" target="./build/Coverage/"
              charset="UTF-8" yui="true" highlight="true" />
-        <log type="junit" target="./tests/output/Results/Results.xml"
+        <log type="junit" target="./build/Results/Results.xml"
              logIncompleteSkipped="true" />
     </logging>
     <testsuites>

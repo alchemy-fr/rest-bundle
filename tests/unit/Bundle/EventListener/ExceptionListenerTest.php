@@ -5,9 +5,15 @@ namespace Alchemy\RestBundle\Tests\EventListener;
 use Alchemy\Rest\Request\ContentTypeMatcher;
 use Alchemy\RestBundle\EventListener\ExceptionListener;
 use Prophecy\Argument;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class ExceptionListenerTest extends ListenerTest
 {
+
+    public function testListenerSubscribesToKernelExceptionEvents()
+    {
+        $this->assertArrayHasKey(KernelEvents::EXCEPTION, ExceptionListener::getSubscribedEvents());
+    }
 
     public function testExceptionsAreConvertedToHttpResponses()
     {

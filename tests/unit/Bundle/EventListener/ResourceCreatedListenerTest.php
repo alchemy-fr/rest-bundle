@@ -5,9 +5,15 @@ namespace Alchemy\RestBundle\Tests\EventListener;
 use Alchemy\Rest\Result\BadRequestResult;
 use Alchemy\Rest\Result\ResourceCreatedResult;
 use Alchemy\RestBundle\EventListener\ResourceCreatedListener;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class ResourceCreatedListenerTest extends ListenerTest
 {
+
+    public function testListenerSubscribesToKernelViewEvents()
+    {
+        $this->assertArrayHasKey(KernelEvents::VIEW, ResourceCreatedListener::getSubscribedEvents());
+    }
 
     public function testResourceCreatedResultsAreConvertedToJsonResponses()
     {

@@ -4,9 +4,14 @@ namespace Alchemy\RestBundle\Tests\EventListener;
 
 use Alchemy\RestBundle\EventListener\SortParamRequestListener;
 use Alchemy\RestBundle\Rest\Request\SortOptionsFactory;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class SortParamRequestListenerTest extends ListenerTest
 {
+    public function testListenerSubscribesToKernelRequestEvents()
+    {
+        $this->assertArrayHasKey(KernelEvents::REQUEST, SortParamRequestListener::getSubscribedEvents());
+    }
 
     public function testRequestsWithoutSortAttributeAreIgnored()
     {

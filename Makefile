@@ -5,13 +5,13 @@ VALIDATE = $(shell composer validate 2>&1 | grep -q "lock file" && echo "compose
 test: deps phpunit phpcs
 
 phpunit:
-	vendor/bin/phpunit --coverage-text --coverage-clover=tests/output/coverage.clover -v
+	php -dzend_extension=xdebug.so vendor/bin/phpunit --coverage-text --coverage-clover=build/coverage.clover -v
 
 phpcs:
-	vendor/bin/phpcs --standard=psr1,psr2 src
+	php -dzend_extension=xdebug.so vendor/bin/phpcs --standard=psr1,psr2 src
 
 fixcs:
-	vendor/bin/phpcbf --standard=psr1,psr2 src
+	php -dzend_extension=xdebug.so vendor/bin/phpcbf --standard=psr1,psr2 src
 
 deps: composer.lock vendor/composer/installed.json
 
@@ -29,11 +29,14 @@ ocular:
 
 ifdef OCULAR_TOKEN
 scrutinizer: ocular
-	@php ocular.phar code-coverage:upload --format=php-clover tests/output/coverage.clover --access-token=$(OCULAR_TOKEN);
+	@php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover --access-token=$(OCULAR_TOKEN);
 else
 scrutinizer: ocular
-	php ocular.phar code-coverage:upload --format=php-clover tests/output/coverage.clover;
+	php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover;
 endif
 
 clean-deps:
 	rm -rf vendor/
+
+clean:
+	rm -rf build/
