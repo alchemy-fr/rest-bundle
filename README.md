@@ -1,8 +1,11 @@
 # Alchemy - Rest bundle 
 
-[![Build Status](https://travis-ci.org/alchemy-fr/rest-bundle.svg?branch=master)](https://travis-ci.org/alchemy-fr/rest-bundle)
-[![Code Coverage](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/?branch=master)
+[![License](https://img.shields.io/packagist/l/alchemy/rest-bundle.svg?style=flat-square)](https://github.com/alchemy-fr/rest-bundle/LICENSE)
+[![Packagist](https://img.shields.io/packagist/v/alchemy/rest-bundle.svg?style=flat-square)](https://packagist.org/packages/alchemy/rest-bundle)
+[![Travis](https://img.shields.io/travis/alchemy-fr/rest-bundle.svg?style=flat-square)](https://travis-ci.org/alchemy-fr/rest-bundle)
+[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/alchemy-fr/rest-bundle.svg?style=flat-square)](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/?branch=master)
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/alchemy-fr/rest-bundle.svg?style=flat-square)](https://scrutinizer-ci.com/g/alchemy-fr/rest-bundle/)
+[![Packagist](https://img.shields.io/packagist/dt/alchemy/rest-bundle.svg?style=flat-square)](https://packagist.org/packages/alchemy/rest-bundle/stats)
 
 ## Features
 
