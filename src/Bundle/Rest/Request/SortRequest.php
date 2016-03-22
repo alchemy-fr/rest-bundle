@@ -59,9 +59,7 @@ class SortRequest implements SortOptions
      */
     private function normalizeSorts($sorts)
     {
-        if ($sorts === null && $this->property !== null && $this->direction !== null) {
-            $sorts = array(array($this->property, $this->direction));
-        }
+        $sorts = $this->coerceToDefaultValue($sorts);
 
         if (is_string($sorts)) {
             $sorts = explode(',', $sorts);
@@ -104,5 +102,18 @@ class SortRequest implements SortOptions
         }
 
         return new Sort($sort, $direction);
+    }
+
+    /**
+     * @param $sorts
+     * @return array
+     */
+    private function coerceToDefaultValue($sorts)
+    {
+        if ($sorts === null && $this->property !== null && $this->direction !== null) {
+            $sorts = array(array($this->property, $this->direction));
+        }
+
+        return $sorts;
     }
 }
