@@ -22,7 +22,11 @@ class SortRequest implements SortOptions
      */
     private $direction;
 
-
+    /**
+     * @param $sorts
+     * @param string|null $property
+     * @param string|null $direction
+     */
     public function __construct($sorts, $property = null, $direction = null)
     {
         $this->sorts = $sorts;
@@ -36,22 +40,10 @@ class SortRequest implements SortOptions
      */
     public function getSorts(array $sortMap = array())
     {
-        if ($this->sorts === null && $this->property !== null && $this->direction !== null) {
-            $this->sorts = array(array($this->property, $this->direction));
-        }
-
-        if ($this->sorts === null) {
-            return array();
-        }
-
-        if (is_string($this->sorts)) {
-            $this->sorts = explode(',', $this->sorts);
-        }
-
         $sorts = array();
 
-        foreach ($this->sorts as $sort) {
-            $sort = $this->normalizeSort($sort);
+        foreach ($this->normalizeSorts($this->sorts) as $sort) {
+            $sort = $this->extractSortProperty($sort);
             $sort = $this->mapSortProperty($sortMap, $sort[0], $sort[1]);
 
             if ($sort) {
@@ -63,10 +55,30 @@ class SortRequest implements SortOptions
     }
 
     /**
+     * @return array|string|null
+     */
+    private function normalizeSorts($sorts)
+    {
+        if ($sorts === null && $this->property !== null && $this->direction !== null) {
+            $sorts = array(array($this->property, $this->direction));
+        }
+
+        if (is_string($sorts)) {
+            $sorts = explode(',', $sorts);
+        }
+
+        if ($sorts === null) {
+            $sorts = array();
+        }
+
+        return $sorts;
+    }
+
+    /**
      * @param $sort
      * @return array
      */
-    private function normalizeSort($sort)
+    private function extractSortProperty($sort)
     {
         if (is_string($sort)) {
             $sort = explode(':', $sort);
@@ -74,8 +86,6 @@ class SortRequest implements SortOptions
 
         if (count($sort) < 2) {
             $sort[1] = self::SORT_ASC;
-
-            return $sort;
         }
 
         return $sort;
