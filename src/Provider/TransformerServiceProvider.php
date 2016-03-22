@@ -17,6 +17,7 @@ class TransformerServiceProvider implements ServiceProviderInterface
 
     public function register(Application $app)
     {
+        $this->registerControllerResultListeners($app);
         $this->registerResponseListener($app);
 
         $this->registerRequestDecoder($app);
@@ -84,23 +85,6 @@ class TransformerServiceProvider implements ServiceProviderInterface
      */
     private function registerResponseListener(Application $app)
     {
-        $this->shareEventListener($app, 'alchemy_rest.transform_success_result_listener', function () {
-            return new EventListener\SuccessResultListener();
-        });
-
-        $this->shareEventListener($app, 'alchemy_rest.transform_bad_request_listener', function () {
-            return new EventListener\BadRequestListener();
-        });
-
-        $this->shareEventListener($app, 'alchemy_rest.transform_request_accepted_listener', function () {
-            return new EventListener\RequestAcceptedListener();
-        });
-
-        $this->shareEventListener($app, 'alchemy_rest.transform_resource_created_listener', function () use ($app) {
-            return new EventListener\ResourceCreatedListener($app['alchemy_rest.array_transformer']);
-        });
-
-
         $app['alchemy_rest.fractal_manager'] = $app->share(function () {
             return new Manager();
         });
@@ -121,6 +105,28 @@ class TransformerServiceProvider implements ServiceProviderInterface
                 $app['alchemy_rest.array_transformer'],
                 $app['url_generator']
             );
+        });
+    }
+
+    /**
+     * @param Application $app
+     */
+    private function registerControllerResultListeners(Application $app)
+    {
+        $this->shareEventListener($app, 'alchemy_rest.transform_success_result_listener', function () {
+            return new EventListener\SuccessResultListener();
+        });
+
+        $this->shareEventListener($app, 'alchemy_rest.transform_bad_request_listener', function () {
+            return new EventListener\BadRequestListener();
+        });
+
+        $this->shareEventListener($app, 'alchemy_rest.transform_request_accepted_listener', function () {
+            return new EventListener\RequestAcceptedListener();
+        });
+
+        $this->shareEventListener($app, 'alchemy_rest.transform_resource_created_listener', function () use ($app) {
+            return new EventListener\ResourceCreatedListener($app['alchemy_rest.array_transformer']);
         });
     }
 }

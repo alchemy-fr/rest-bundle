@@ -37,19 +37,7 @@ class RestProvider implements ServiceProviderInterface
         $app->register(new TransformerServiceProvider());
         $app->register(new MiddlewareServiceProvider());
 
-        $app['dispatcher'] = $app->share(
-            $app->extend('dispatcher', function (EventDispatcherInterface $dispatcher) use ($app) {
-                $this->bindRequestListeners($app, $dispatcher);
-
-                // Bind exception
-                $dispatcher->addSubscriber($app['alchemy_rest.exception_listener']);
-                // This block must be called after all other result listeners
-                $dispatcher->addSubscriber($app['alchemy_rest.transform_response_listener']);
-                $dispatcher->addSubscriber($app['alchemy_rest.encode_response_listener']);
-
-                return $dispatcher;
-            })
-        );
+        $this->registerEventSubscribers($app);
     }
 
     private function bindRequestListeners(Application $app, EventDispatcherInterface $dispatcher)
@@ -139,5 +127,25 @@ class RestProvider implements ServiceProviderInterface
         $app['alchemy_rest.content_type_matcher'] = $app->share(function () use ($app) {
             return new ContentTypeMatcher($app['alchemy_rest.negotiator']);
         });
+    }
+
+    /**
+     * @param Application $app
+     */
+    private function registerEventSubscribers(Application $app)
+    {
+        $app['dispatcher'] = $app->share(
+            $app->extend('dispatcher', function (EventDispatcherInterface $dispatcher) use ($app) {
+                $this->bindRequestListeners($app, $dispatcher);
+
+                // Bind exception
+                $dispatcher->addSubscriber($app['alchemy_rest.exception_listener']);
+                // This block must be called after all other result listeners
+                $dispatcher->addSubscriber($app['alchemy_rest.transform_response_listener']);
+                $dispatcher->addSubscriber($app['alchemy_rest.encode_response_listener']);
+
+                return $dispatcher;
+            })
+        );
     }
 }

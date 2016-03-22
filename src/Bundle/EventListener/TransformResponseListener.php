@@ -116,7 +116,7 @@ class TransformResponseListener implements EventSubscriberInterface
             );
         }
 
-        return $transformedData = $this->transformer->transform(
+        return $this->transformer->transform(
             $config['transform'],
             $data,
             $includes

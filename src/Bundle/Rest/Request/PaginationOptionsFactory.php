@@ -52,13 +52,13 @@ class PaginationOptionsFactory
     {
         $optionsResolver = new OptionsResolver();
 
-        // BC with symfony < 2.6
         if (method_exists($optionsResolver, 'setDefined')) {
             $optionsResolver->setDefined(array_merge(array(
                 $offsetName,
                 $limitName
             ), array_keys($options)));
         } else {
+            // BC with symfony < 2.6
             $optionsResolver->setOptional(array_merge(array(
                 $offsetName,
                 $limitName
