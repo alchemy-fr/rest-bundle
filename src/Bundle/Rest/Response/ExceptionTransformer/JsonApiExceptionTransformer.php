@@ -19,7 +19,7 @@ class JsonApiExceptionTransformer implements ExceptionTransformer
      * @param \Exception $exception
      * @return array
      */
-    public function transformException(\Exception $exception)
+    public function transformException(\Throwable $exception)
     {
         $data = array(
             'code' => sprintf('%d', $exception->getCode()),

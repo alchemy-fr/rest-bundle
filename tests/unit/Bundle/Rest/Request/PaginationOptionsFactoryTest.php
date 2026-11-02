@@ -4,7 +4,7 @@ namespace Alchemy\RestBundle\Tests\Bundle\Rest\Request;
 
 use Alchemy\RestBundle\Rest\Request\PaginationOptionsFactory;
 
-class PaginationOptionsFactoryTest extends \PHPUnit_Framework_TestCase
+class PaginationOptionsFactoryTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testPaginationIsResolvedProperlyWithDefaults()

@@ -4,7 +4,7 @@ namespace Alchemy\RestBundle\Tests\Bundle\Rest\Request;
 
 use Alchemy\RestBundle\Rest\Request\PaginationRequest;
 
-class PaginationRequestTest extends \PHPUnit_Framework_TestCase
+class PaginationRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetLimitReturnsCorrectValue()
@@ -67,7 +67,7 @@ class PaginationRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($page, $request->getCurrentPage($limit));
     }
 
-    public function providesPageComputation()
+    public static function providesPageComputation()
     {
         return [
             [0, 10, 1],

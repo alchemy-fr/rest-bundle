@@ -5,15 +5,15 @@ namespace Alchemy\RestBundle\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class EncodeJsonResponseListener implements EventSubscriberInterface
 {
 
-    public function onKernelView(GetResponseForControllerResultEvent $event)
+    public function onKernelView(ViewEvent $event)
     {
-        if (! $event->getRequest()->attributes->get('_rest[encode_response]', false, true)) {
+        if (! ($event->getRequest()->attributes->all()['_rest']['encode_response'] ?? false)) {
             return;
         }
 

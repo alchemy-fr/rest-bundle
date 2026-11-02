@@ -12,8 +12,10 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\Kernel;
 
-class RestBundleTest extends \PHPUnit_Framework_TestCase
+class RestBundleTest extends \PHPUnit\Framework\TestCase
 {
+    use \Prophecy\PhpUnit\ProphecyTrait;
+
 
     const CONTAINER_CLASS = 'Symfony\Component\DependencyInjection\ContainerBuilder';
 
@@ -32,12 +34,12 @@ class RestBundleTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildContainer()
     {
-        $container = $this->prophesize(self::CONTAINER_CLASS);
-        $container->addCompilerPass(Argument::type(self::COMPILER_PASS_CLASS))->shouldBeCalled();
+        $container = new ContainerBuilder();
 
-        $bundle = new RestBundle();
+        (new RestBundle())->build($container);
 
-        $bundle->build($container->reveal());
+        $passes = array_map('get_class', $container->getCompilerPassConfig()->getBeforeOptimizationPasses());
+        $this->assertContains(self::COMPILER_PASS_CLASS, $passes);
     }
 
     public function testBundleIsInitializedProperlyInKernel()

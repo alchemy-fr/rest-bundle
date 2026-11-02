@@ -11,13 +11,12 @@ use League\Fractal\TransformerAbstract;
 use Pagerfanta\Adapter\AdapterInterface;
 use Pagerfanta\Pagerfanta;
 
-class ArrayTransformerTest extends \PHPUnit_Framework_TestCase
+class ArrayTransformerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testGetTransformerThrowsExceptionOnMissingKeys()
     {
+        $this->expectException('RuntimeException');
+
         $transformer = new ArrayTransformer(new Manager(), new TransformerRegistry());
 
         $transformer->getTransformer('missing');
@@ -113,7 +112,7 @@ class ArrayTransformerTest extends \PHPUnit_Framework_TestCase
                     'per_page' => $pager->getMaxPerPage(),
                     'current_page' => 1,
                     'total_pages' => 1,
-                    'links' => array()
+                    'links' => new \stdClass()
                 )
             )
         ), $data);
@@ -123,7 +122,7 @@ class ArrayTransformerTest extends \PHPUnit_Framework_TestCase
 class MockTransformer extends TransformerAbstract
 {
 
-    protected $availableIncludes = array('child');
+    protected array $availableIncludes = array('child');
 
     public function transform($object)
     {
@@ -153,7 +152,7 @@ class MockPager implements AdapterInterface
      *
      * @return integer The number of results.
      */
-    public function getNbResults()
+    public function getNbResults(): int
     {
         return count($this->objects);
     }
@@ -166,7 +165,7 @@ class MockPager implements AdapterInterface
      *
      * @return array|\Traversable The slice.
      */
-    public function getSlice($offset, $length)
+    public function getSlice(int $offset, int $length): iterable
     {
         return array_slice($this->objects, $offset, $length);
     }

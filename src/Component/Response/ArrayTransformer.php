@@ -65,7 +65,7 @@ class ArrayTransformer
      * @param null|string|array $includes
      * @return array
      */
-    public function transformList($key, $resources, $includes = null, PaginatorInterface $paginator = null)
+    public function transformList($key, $resources, $includes = null, ?PaginatorInterface $paginator = null)
     {
         $transformer = $this->getTransformer($key);
         $resource = new Collection($resources, $transformer);

@@ -18,17 +18,17 @@ class TransformerRegistry implements \ArrayAccess
         $this->transformers[$key] = $transformer;
     }
 
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->transformers[$offset]);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->transformers[$offset];
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if (! $value instanceof TransformerAbstract) {
             throw new \InvalidArgumentException('Value must be an instance of League\Fractal\AbstractTransformer');
@@ -37,7 +37,7 @@ class TransformerRegistry implements \ArrayAccess
         $this->transformers[$offset] = $value;
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->transformers[$offset]);
     }

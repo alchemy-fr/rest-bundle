@@ -24,7 +24,7 @@ class RestExtension extends ConfigurableExtension
      * @param array $config
      * @param ContainerBuilder $container
      */
-    protected function loadInternal(array $config, ContainerBuilder $container)
+    protected function loadInternal(array $config, \Symfony\Component\DependencyInjection\ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader($container, new FileLocator(
             __DIR__ . '/../Resources/config'

@@ -4,10 +4,10 @@ namespace Alchemy\Rest\Tests\Request;
 
 use Alchemy\Rest\Request\ContentTypeMatcher;
 
-class ContentTypeMatcherTest extends \PHPUnit_Framework_TestCase
+class ContentTypeMatcherTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function getCommonContentTypes()
+    public static function getCommonContentTypes()
     {
         return array(
             array('text/plain'),

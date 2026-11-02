@@ -8,5 +8,5 @@ interface ExceptionTransformer
      * @param \Exception $exception
      * @return array
      */
-    public function transformException(\Exception $exception);
+    public function transformException(\Throwable $exception);
 }

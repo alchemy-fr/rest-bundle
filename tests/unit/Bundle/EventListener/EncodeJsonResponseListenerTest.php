@@ -13,12 +13,14 @@ namespace Alchemy\RestBundle\Tests\EventListener;
 
 use Alchemy\RestBundle\EventListener\EncodeJsonResponseListener;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class EncodeJsonResponseListenerTest extends ListenerTest
 {
+    use \Prophecy\PhpUnit\ProphecyTrait;
+
 
     public function testListenerSubscribesToKernelViewEvents()
     {
@@ -29,7 +31,7 @@ class EncodeJsonResponseListenerTest extends ListenerTest
     {
         $kernel = $this->prophesize('\Symfony\Component\HttpKernel\HttpKernelInterface')->reveal();
         $request = new Request();
-        $event = new GetResponseForControllerResultEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST, [ 'my data' ]);
+        $event = new ViewEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, [ 'my data' ]);
 
         $listener = new EncodeJsonResponseListener();
 
@@ -46,11 +48,11 @@ class EncodeJsonResponseListenerTest extends ListenerTest
         $request = new Request();
         $request->attributes->set('_rest', [ 'encode_response' => true ]);
 
-        $event = new GetResponseForControllerResultEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST, 'my data');
+        $event = new ViewEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, 'my data');
 
         $listener = new EncodeJsonResponseListener();
 
-        $this->setExpectedException('\LogicException');
+        $this->expectException('\LogicException');
 
         $listener->onKernelView($event);
     }
@@ -60,7 +62,7 @@ class EncodeJsonResponseListenerTest extends ListenerTest
         $kernel = $this->prophesize('\Symfony\Component\HttpKernel\HttpKernelInterface')->reveal();
 
         $request = new Request();
-        $event = new GetResponseForControllerResultEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST, [ 'my data' ]);
+        $event = new ViewEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, [ 'my data' ]);
         $listener = new EncodeJsonResponseListener();
 
         $request->attributes->set('_rest', [ 'encode_response' => true ]);

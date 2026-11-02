@@ -5,7 +5,7 @@ namespace Alchemy\RestBundle\Tests\Bundle\Rest\Request;
 use Alchemy\Rest\Request\Sort;
 use Alchemy\RestBundle\Rest\Request\SortRequest;
 
-class SortRequestTest extends \PHPUnit_Framework_TestCase
+class SortRequestTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetSortsReturnsEmptyArrayWhenNoSortsAreSet()
@@ -19,7 +19,7 @@ class SortRequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new SortRequest(null, 'test', 'ASC');
 
-        $this->assertContains(new Sort('test', 'ASC'), $request->getSorts(), '', false, false);
+        $this->assertContainsEquals(new Sort('test', 'ASC'), $request->getSorts(), '', false, false);
     }
 
     public function testGetSortsIgnoresSortPropertyWhenMultisortIsSet()
@@ -35,8 +35,8 @@ class SortRequestTest extends \PHPUnit_Framework_TestCase
 
         $sorts = $request->getSorts();
 
-        $this->assertContains(new Sort('test', 'ASC'), $sorts, '', false, false);
-        $this->assertContains(new Sort('hello', 'DESC'), $sorts, '', false, false);
+        $this->assertContainsEquals(new Sort('test', 'ASC'), $sorts, '', false, false);
+        $this->assertContainsEquals(new Sort('hello', 'DESC'), $sorts, '', false, false);
     }
 
     public function testGetSortsSetsSortToAscendingWhenDirectionIsNotSpecified()
@@ -45,8 +45,8 @@ class SortRequestTest extends \PHPUnit_Framework_TestCase
 
         $sorts = $request->getSorts();
 
-        $this->assertContains(new Sort('test', 'ASC'), $sorts, '', false, false);
-        $this->assertContains(new Sort('hello', 'ASC'), $sorts, '', false, false);
+        $this->assertContainsEquals(new Sort('test', 'ASC'), $sorts, '', false, false);
+        $this->assertContainsEquals(new Sort('hello', 'ASC'), $sorts, '', false, false);
     }
 
     public function testGetSortsProperlyMapsFieldNames()
@@ -59,7 +59,7 @@ class SortRequestTest extends \PHPUnit_Framework_TestCase
 
         $sorts = $request->getSorts($map);
 
-        $this->assertContains(new Sort('prod', 'ASC'), $sorts, '', false, false);
-        $this->assertContains(new Sort('bye', 'ASC'), $sorts, '', false, false);
+        $this->assertContainsEquals(new Sort('prod', 'ASC'), $sorts, '', false, false);
+        $this->assertContainsEquals(new Sort('bye', 'ASC'), $sorts, '', false, false);
     }
 }

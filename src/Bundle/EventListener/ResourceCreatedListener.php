@@ -6,7 +6,7 @@ use Alchemy\Rest\Response\ArrayTransformer;
 use Alchemy\Rest\Result\ResourceCreatedResult;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class ResourceCreatedListener implements EventSubscriberInterface
@@ -19,7 +19,7 @@ class ResourceCreatedListener implements EventSubscriberInterface
         $this->transformer = $transformer;
     }
 
-    public function onKernelView(GetResponseForControllerResultEvent $event)
+    public function onKernelView(ViewEvent $event)
     {
         $result = $event->getControllerResult();
         $request = $event->getRequest();
@@ -28,7 +28,7 @@ class ResourceCreatedListener implements EventSubscriberInterface
             return;
         }
 
-        $transformerKey = $request->attributes->get('_rest[transform]', null, true);
+        $transformerKey = ($request->attributes->all()['_rest']['transform'] ?? null);
 
         $transformedData = $this->transformer->transform($transformerKey, $result->getResource());
         $transformedData = $this->setMetadata($transformedData, $result);

@@ -4,7 +4,7 @@ namespace Alchemy\Rest\Tests\Request;
 
 use Alchemy\Rest\Request\Sort;
 
-class SortTest extends \PHPUnit_Framework_TestCase
+class SortTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetFieldNameReturnsAssignedValue()

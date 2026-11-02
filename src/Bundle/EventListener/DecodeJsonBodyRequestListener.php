@@ -5,7 +5,7 @@ namespace Alchemy\RestBundle\EventListener;
 use Alchemy\Rest\Request\ContentTypeMatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class DecodeJsonBodyRequestListener implements EventSubscriberInterface
@@ -24,13 +24,13 @@ class DecodeJsonBodyRequestListener implements EventSubscriberInterface
      * @param ContentTypeMatcher $contentTypeMatcher
      * @param null|string[] $contentTypes
      */
-    public function __construct(ContentTypeMatcher $contentTypeMatcher, array $contentTypes = null)
+    public function __construct(ContentTypeMatcher $contentTypeMatcher, ?array $contentTypes = null)
     {
         $this->contentTypeMatcher = $contentTypeMatcher;
         $this->contentTypes = $contentTypes ?: array('application/json');
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
         $restAttributes = $request->attributes->get('_rest', []);

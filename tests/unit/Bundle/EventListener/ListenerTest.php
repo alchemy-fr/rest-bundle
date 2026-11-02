@@ -3,23 +3,25 @@
 namespace Alchemy\RestBundle\Tests\EventListener;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-abstract class ListenerTest extends \PHPUnit_Framework_TestCase
+abstract class ListenerTest extends \PHPUnit\Framework\TestCase
 {
+    use \Prophecy\PhpUnit\ProphecyTrait;
+
 
     protected function getControllerResultEvent($result)
     {
         $kernel = $this->prophesize('Symfony\Component\HttpKernel\HttpKernelInterface');
         $request = new Request();
 
-        return new GetResponseForControllerResultEvent(
+        return new ViewEvent(
             $kernel->reveal(),
             $request,
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $result
         );
     }
@@ -29,10 +31,10 @@ abstract class ListenerTest extends \PHPUnit_Framework_TestCase
         $kernel = $this->prophesize('Symfony\Component\HttpKernel\HttpKernelInterface');
         $request = new Request();
 
-        return new GetResponseForExceptionEvent(
+        return new ExceptionEvent(
             $kernel->reveal(),
             $request,
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $exception
         );
     }
@@ -42,10 +44,10 @@ abstract class ListenerTest extends \PHPUnit_Framework_TestCase
         $kernel = $this->prophesize('Symfony\Component\HttpKernel\HttpKernelInterface');
         $request = new Request(array(), array(), array(), array(), array(), array(), $content);
 
-        return new GetResponseEvent(
+        return new RequestEvent(
             $kernel->reveal(),
             $request,
-            HttpKernelInterface::MASTER_REQUEST
+            HttpKernelInterface::MAIN_REQUEST
         );
     }
 

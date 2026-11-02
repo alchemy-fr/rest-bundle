@@ -7,8 +7,10 @@ use Prophecy\Argument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class TransformerCompilerPassTest extends \PHPUnit_Framework_TestCase
+class TransformerCompilerPassTest extends \PHPUnit\Framework\TestCase
 {
+    use \Prophecy\PhpUnit\ProphecyTrait;
+
 
     const CONTAINER_CLASS = 'Symfony\Component\DependencyInjection\ContainerBuilder';
 
@@ -21,64 +23,32 @@ class TransformerCompilerPassTest extends \PHPUnit_Framework_TestCase
 
         $pass->process($container);
 
-        $this->assertCount(0, $container->getDefinitions());
+        $this->assertFalse($container->hasDefinition('alchemy_rest.transformer_registry'));
+        $this->assertCount(1, $container->getDefinitions());
     }
 
-    public function testCompilerPassDoesNotModifyConfigurationWithTaggedServices()
+    public function testCompilerPassDoesNotModifyConfigurationWithoutTaggedServices()
     {
-        $container = $this->prophesize(self::CONTAINER_CLASS);
-        $definition = $this->prophesize(self::DEFINITION_CLASS);
+        $container = new ContainerBuilder();
+        $registry = $container->register('alchemy_rest.transformer_registry');
 
-        $container->hasDefinition(Argument::any())->willReturn(true);
-        $container->findDefinition(Argument::any())->willReturn($definition->reveal());
-        $container->findTaggedServiceIds(Argument::any())->willReturn(array());
+        (new TransformerCompilerPass())->process($container);
 
-        $compilerPass = new TransformerCompilerPass();
-
-        $compilerPass->process($container->reveal());
-    }
-
-    public function validateSetTransformerArguments($arguments)
-    {
-        if (! is_array($arguments) || count($arguments) != 2) {
-            return false;
-        }
-
-        if ($arguments[0] !== 'transformer') {
-            return false;
-        }
-
-        if (! $arguments[1] instanceof Reference && ((string)$arguments[1]) !== 'test') {
-            return false;
-        }
-
-        return true;
+        $this->assertSame([], $registry->getMethodCalls());
     }
 
     public function testCompilerPassAddsTaggedDefinitionsToTransformerService()
     {
-        $container = $this->prophesize(self::CONTAINER_CLASS);
-        $definition = $this->prophesize(self::DEFINITION_CLASS);
-        $taggedDefinition = $this->prophesize(self::DEFINITION_CLASS);
-        $taggedId = 'test';
+        $container = new ContainerBuilder();
+        $registry = $container->register('alchemy_rest.transformer_registry');
+        $container->register('test')->addTag('alchemy_rest.transformer', ['alias' => 'transformer']);
 
-        $definition->addMethodCall(Argument::exact('setTransformer'), Argument::that(array(
-            $this,
-            'validateSetTransformerArguments'
-        )))->shouldBeCalled();
+        (new TransformerCompilerPass())->process($container);
 
-        $container->hasDefinition(Argument::any())->willReturn(true);
-        $container->findDefinition(Argument::any())->willReturn($definition->reveal());
-        $container->findDefinition(Argument::exact($taggedId))->willReturn($taggedDefinition->reveal());
-
-        $container->findTaggedServiceIds(Argument::any())->willReturn(array(
-            'test' => array(
-                array('alias' => 'transformer')
-            )
-        ));
-
-        $compilerPass = new TransformerCompilerPass();
-
-        $compilerPass->process($container->reveal());
+        $calls = $registry->getMethodCalls();
+        $this->assertCount(1, $calls);
+        $this->assertSame('setTransformer', $calls[0][0]);
+        $this->assertSame('transformer', $calls[0][1][0]);
+        $this->assertEquals(new Reference('test'), $calls[0][1][1]);
     }
 }
