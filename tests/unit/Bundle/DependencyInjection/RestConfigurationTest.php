@@ -6,7 +6,7 @@ use Alchemy\RestBundle\DependencyInjection\RestConfiguration;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Yaml;
 
-class RestConfigurationTest extends \PHPUnit_Framework_TestCase
+class RestConfigurationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testConfigurationDefaultsAreProperlyLoaded()

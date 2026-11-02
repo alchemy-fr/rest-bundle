@@ -3,190 +3,91 @@
 namespace Alchemy\RestBundle\Tests\DependencyInjection;
 
 use Alchemy\RestBundle\DependencyInjection\RestExtension;
-use Prophecy\Argument;
-use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class RestExtensionTest extends \PHPUnit_Framework_TestCase
+class RestExtensionTest extends \PHPUnit\Framework\TestCase
 {
+    private function load(array $config): ContainerBuilder
+    {
+        $container = new ContainerBuilder();
 
-    const CONTAINER_CLASS = 'Symfony\Component\DependencyInjection\ContainerBuilder';
+        (new RestExtension())->load(['alchemy_rest' => $config + [
+            'exceptions' => ['enabled' => false],
+            'dates' => ['enabled' => false],
+            'sort' => ['enabled' => false],
+            'pagination' => ['enabled' => false],
+        ]], $container);
 
-    const DEFINITION_CLASS = 'Symfony\Component\DependencyInjection\Definition';
+        return $container;
+    }
 
     public function testListenersAreRemovedWhenNotEnabled()
     {
-        $config = array('alchemy_rest' => array(
-            'exceptions' => array('enabled' => false),
-            'dates' => array('enabled' => false),
-            'sort' => array('enabled' => false),
-            'pagination' => array('enabled' => false)
-        ));
+        $container = $this->load([]);
 
-        $extension = new RestExtension();
-        $container = $this->prophesize(self::CONTAINER_CLASS);
-
-        $container->addResource(Argument::any())->shouldBeCalled();
-        $container->setDefinition(Argument::any(), Argument::any())->shouldBeCalled();
-        $container->removeDefinition(Argument::exact('alchemy_rest.date_request_listener'))->shouldBeCalled();
-        $container->removeDefinition(Argument::exact('alchemy_rest.sort_request_listener'))->shouldBeCalled();
-        $container->removeDefinition(Argument::exact('alchemy_rest.paginate_request_listener'))->shouldBeCalled();
-        $container->removeDefinition(Argument::exact('alchemy_rest.exception_listener'))->shouldBeCalled();
-
-        $extension->load($config, $container->reveal());
+        foreach (['date_request_listener', 'sort_request_listener', 'paginate_request_listener', 'exception_listener'] as $listener) {
+            $this->assertFalse($container->hasDefinition('alchemy_rest.'.$listener), $listener);
+        }
     }
 
     public function testExceptionListenerArgumentsAreReplacedWhenExceptionListenerIsEnabled()
     {
-        $config = array('alchemy_rest' => array(
-            'exceptions' => array(
-                'enabled' => true,
-                'transformer' => 'transformer_reference',
-                'content_types' => array('text/dummy')
-            ),
-            'dates' => array('enabled' => false),
-            'sort' => array('enabled' => false),
-            'pagination' => array('enabled' => false)
-        ));
+        $listener = $this->load(['exceptions' => [
+            'enabled' => true,
+            'transformer' => 'transformer_reference',
+            'content_types' => ['text/dummy'],
+        ]])->getDefinition('alchemy_rest.exception_listener');
 
-        $exceptionListener = new Definition();
-        $exceptionListener->setArguments(array(null, null, null));
-
-        $container = $this->prophesize(self::CONTAINER_CLASS);
-        $container->addResource(Argument::any())->shouldBeCalled();
-        $container->setDefinition(Argument::any(), Argument::any())->shouldBeCalled();
-        $container->removeDefinition(Argument::any())->shouldBeCalled();
-        $container->removeDefinition(Argument::exact('alchemy_rest.exception_listener'))->shouldNotBeCalled();
-        $container->getDefinition(Argument::exact('alchemy_rest.exception_listener'))->willReturn($exceptionListener);
-
-        $extension = new RestExtension();
-
-        $extension->load($config, $container->reveal());
-
-        $this->assertEquals('transformer_reference', (string) $exceptionListener->getArgument(0));
-        $this->assertEquals(array('text/dummy'), $exceptionListener->getArgument(2));
+        $this->assertEquals(new Reference('transformer_reference'), $listener->getArgument(0));
+        $this->assertSame(['text/dummy'], $listener->getArgument(2));
     }
 
     public function testExceptionListenerTransformerArgumentIsNotReplacedWhenTransformerParameterIsNull()
     {
-        $config = array('alchemy_rest' => array(
-            'exceptions' => array(
-                'enabled' => true,
-                'transformer' => null,
-                'content_types' => array('text/dummy')
-            ),
-            'dates' => array('enabled' => false),
-            'sort' => array('enabled' => false),
-            'pagination' => array('enabled' => false)
-        ));
+        $listener = $this->load(['exceptions' => [
+            'enabled' => true,
+            'transformer' => null,
+            'content_types' => ['text/dummy'],
+        ]])->getDefinition('alchemy_rest.exception_listener');
 
-        $exceptionListener = new Definition();
-        $exceptionListener->setArguments(array(new Reference('transformer'), null, null));
-
-        $container = $this->prophesize(self::CONTAINER_CLASS);
-        $container->addResource(Argument::any())->shouldBeCalled();
-        $container->setDefinition(Argument::any(), Argument::any())->shouldBeCalled();
-        $container->removeDefinition(Argument::any())->shouldBeCalled();
-        $container->removeDefinition(Argument::exact('alchemy_rest.exception_listener'))->shouldNotBeCalled();
-        $container->getDefinition(Argument::exact('alchemy_rest.exception_listener'))->willReturn($exceptionListener);
-
-        $extension = new RestExtension();
-
-        $extension->load($config, $container->reveal());
-
-        $this->assertEquals('transformer', (string) $exceptionListener->getArgument(0));
-        $this->assertEquals(array('text/dummy'), $exceptionListener->getArgument(2));
+        $this->assertEquals(new Reference('alchemy_rest.content_type_matcher'), $listener->getArgument(0));
+        $this->assertSame(['text/dummy'], $listener->getArgument(2));
     }
 
     public function testDateParserArgumentsAreReplacedWhenDateListenerIsEnabled()
     {
-        $config = array('alchemy_rest' => array(
-            'exceptions' => array('enabled' => false),
-            'dates' => array(
-                'enabled' => true,
-                'timezone' => 'date_tz_name',
-                'format' => 'date_format'
-            ),
-            'sort' => array('enabled' => false),
-            'pagination' => array('enabled' => false)
-        ));
+        $parser = $this->load(['dates' => [
+            'enabled' => true,
+            'timezone' => 'date_tz_name',
+            'format' => 'date_format',
+        ]])->getDefinition('alchemy_rest.date_parser');
 
-        $dateParser = new Definition();
-
-        $container = $this->prophesize(self::CONTAINER_CLASS);
-        $container->addResource(Argument::any())->shouldBeCalled();
-        $container->setDefinition(Argument::any(), Argument::any())->shouldBeCalled();
-        $container->removeDefinition(Argument::any())->shouldBeCalled();
-        $container->removeDefinition(Argument::exact('alchemy_rest.date_request_listener'))->shouldNotBeCalled();
-        $container->getDefinition(Argument::exact('alchemy_rest.date_parser'))->willReturn($dateParser);
-
-        $extension = new RestExtension();
-
-        $extension->load($config, $container->reveal());
-
-        $this->assertEquals('date_tz_name', $dateParser->getArgument(0));
-        $this->assertEquals('date_format', $dateParser->getArgument(1));
+        $this->assertSame('date_tz_name', $parser->getArgument(0));
+        $this->assertSame('date_format', $parser->getArgument(1));
     }
 
     public function testPaginateOptionsFactoryArgumentsAreReplacedWhenPaginationListenerIsEnabled()
     {
-        $config = array('alchemy_rest' => array(
-            'exceptions' => array('enabled' => false),
-            'dates' => array('enabled' => false),
-            'sort' => array('enabled' => false),
-            'pagination' => array(
-                'enabled' => true,
-                'limit_parameter' => 'paginate_limit_name',
-                'offset_parameter' => 'paginate_offset_name'
-            )
-        ));
+        $factory = $this->load(['pagination' => [
+            'enabled' => true,
+            'offset_parameter' => 'offset_name',
+            'limit_parameter' => 'limit_name',
+        ]])->getDefinition('alchemy_rest.paginate_options_factory');
 
-        $paginationFactory = new Definition();
-
-        $container = $this->prophesize(self::CONTAINER_CLASS);
-        $container->addResource(Argument::any())->shouldBeCalled();
-        $container->setDefinition(Argument::any(), Argument::any())->shouldBeCalled();
-        $container->removeDefinition(Argument::any())->shouldBeCalled();
-        $container->removeDefinition(Argument::exact('alchemy_rest.paginate_request_listener'))->shouldNotBeCalled();
-        $container->getDefinition(Argument::exact('alchemy_rest.paginate_options_factory'))->willReturn($paginationFactory);
-
-        $extension = new RestExtension();
-
-        $extension->load($config, $container->reveal());
-
-        $this->assertEquals('paginate_offset_name', $paginationFactory->getArgument(0));
-        $this->assertEquals('paginate_limit_name', $paginationFactory->getArgument(1));
+        $this->assertSame('offset_name', $factory->getArgument(0));
+        $this->assertSame('limit_name', $factory->getArgument(1));
     }
 
-    public function testSortOptionsFactoryArgumentsAreReplacedWhenPaginationListenerIsEnabled()
+    public function testSortOptionsFactoryArgumentsAreReplacedWhenSortListenerIsEnabled()
     {
-        $config = array('alchemy_rest' => array(
-            'exceptions' => array('enabled' => false),
-            'dates' => array('enabled' => false),
-            'sort' => array(
-                'enabled' => true,
-                'sort_parameter' => 'sort_parameter_name',
-                'direction_parameter' => 'dir_parameter_name',
-                'multi_sort_parameter' => 'multi_sort_parameter_name'
-            ),
-            'pagination' => array('enabled' => false)
-        ));
+        $factory = $this->load(['sort' => [
+            'enabled' => true,
+            'sort_parameter' => 'sort_name',
+            'direction_parameter' => 'direction_name',
+            'multi_sort_parameter' => 'multi_name',
+        ]])->getDefinition('alchemy_rest.sort_options_factory');
 
-        $sortFactory = new Definition();
-
-        $container = $this->prophesize(self::CONTAINER_CLASS);
-        $container->addResource(Argument::any())->shouldBeCalled();
-        $container->setDefinition(Argument::any(), Argument::any())->shouldBeCalled();
-        $container->removeDefinition(Argument::any())->shouldBeCalled();
-        $container->removeDefinition(Argument::exact('alchemy_rest.sort_request_listener'))->shouldNotBeCalled();
-        $container->getDefinition(Argument::exact('alchemy_rest.sort_options_factory'))->willReturn($sortFactory);
-
-        $extension = new RestExtension();
-
-        $extension->load($config, $container->reveal());
-
-        $this->assertEquals('sort_parameter_name', $sortFactory->getArgument(0));
-        $this->assertEquals('multi_sort_parameter_name', $sortFactory->getArgument(2));
-        $this->assertEquals('dir_parameter_name', $sortFactory->getArgument(1));
+        $this->assertSame(['sort_name', 'direction_name', 'multi_name'], $factory->getArguments());
     }
 }

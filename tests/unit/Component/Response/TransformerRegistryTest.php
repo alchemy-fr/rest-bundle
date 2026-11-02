@@ -5,7 +5,7 @@ namespace Alchemy\RestBundle\Tests\Response;
 use Alchemy\Rest\Response\TransformerRegistry;
 use League\Fractal\TransformerAbstract;
 
-class TransformerRegistryTest extends \PHPUnit_Framework_TestCase
+class TransformerRegistryTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testKeysAreCorrectlySetBySetTransformerCalls()
@@ -37,11 +37,10 @@ class TransformerRegistryTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($registry->offsetExists('mock'));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testOffsetSetThrowsExceptionWhenUsedWithInvalidType()
     {
+        $this->expectException('InvalidArgumentException');
+
         $registry = new TransformerRegistry();
 
         $registry->offsetSet('mock', new \stdClass());

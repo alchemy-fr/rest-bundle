@@ -8,6 +8,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class RequestMatchingExceptionListenerTest extends ListenerTest
 {
+    use \Prophecy\PhpUnit\ProphecyTrait;
+
 
     public function testListenerSubscribesToKernelExceptionEvents()
     {

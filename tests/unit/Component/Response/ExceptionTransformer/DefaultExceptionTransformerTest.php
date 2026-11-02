@@ -4,7 +4,7 @@ namespace Alchemy\Rest\Tests\Response\ExceptionTransformer;
 
 use Alchemy\Rest\Response\ExceptionTransformer\DefaultExceptionTransformer;
 
-class DefaultExceptionTransformerTest extends \PHPUnit_Framework_TestCase
+class DefaultExceptionTransformerTest extends \PHPUnit\Framework\TestCase
 {
 
     private function throwDummyException($message, $code)

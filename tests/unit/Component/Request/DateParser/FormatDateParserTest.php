@@ -4,10 +4,10 @@ namespace Alchemy\Rest\Tests\Request\DateParser;
 
 use Alchemy\Rest\Request\DateParser\FormatDateParser;
 
-class FormatDateParserTest extends \PHPUnit_Framework_TestCase
+class FormatDateParserTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function getInvalidDates()
+    public static function getInvalidDates()
     {
         return array(
             array('hfjdsfjds'),

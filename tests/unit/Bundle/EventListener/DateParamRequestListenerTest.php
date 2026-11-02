@@ -8,6 +8,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class DateParamRequestListenerTest extends ListenerTest
 {
+    use \Prophecy\PhpUnit\ProphecyTrait;
+
 
     public function testListenerSubscribesToKernelRequestEvents()
     {

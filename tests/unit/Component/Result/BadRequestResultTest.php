@@ -4,7 +4,7 @@ namespace Alchemy\Rest\Tests\Result;
 
 use Alchemy\Rest\Result\BadRequestResult;
 
-class BadRequestResultTest extends \PHPUnit_Framework_TestCase
+class BadRequestResultTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetMetadataReturnsOriginalMeta()

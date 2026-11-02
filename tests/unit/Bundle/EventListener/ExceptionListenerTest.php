@@ -9,6 +9,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class ExceptionListenerTest extends ListenerTest
 {
+    use \Prophecy\PhpUnit\ProphecyTrait;
+
 
     public function testListenerSubscribesToKernelExceptionEvents()
     {

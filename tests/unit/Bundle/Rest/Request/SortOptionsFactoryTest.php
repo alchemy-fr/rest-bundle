@@ -5,7 +5,7 @@ namespace Alchemy\RestBundle\Tests\Bundle\Rest\Request;
 use Alchemy\Rest\Request\Sort;
 use Alchemy\RestBundle\Rest\Request\SortOptionsFactory;
 
-class SortOptionsFactoryTest extends \PHPUnit_Framework_TestCase
+class SortOptionsFactoryTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testSortIsResolvedProperlyWithDefaults()

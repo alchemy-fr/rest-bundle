@@ -4,7 +4,7 @@ namespace Alchemy\Rest\Tests\Result;
 
 use Alchemy\Rest\Result\ResourceCreatedResult;
 
-class ResourceCreatedResultTest extends \PHPUnit_Framework_TestCase
+class ResourceCreatedResultTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetResourceReturnsCorrectResource()

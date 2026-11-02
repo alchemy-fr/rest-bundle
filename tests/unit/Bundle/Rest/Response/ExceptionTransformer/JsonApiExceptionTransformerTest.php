@@ -5,7 +5,7 @@ namespace Alchemy\RestBundle\Tests\Response\ExceptionTransformer;
 use Alchemy\RestBundle\Rest\Response\ExceptionTransformer\JsonApiExceptionTransformer;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class JsonApiExceptionTransformerTest extends \PHPUnit_Framework_TestCase
+class JsonApiExceptionTransformerTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testTransformedExceptionDataMatchesJsonApiSpecificationStructure()
@@ -18,10 +18,11 @@ class JsonApiExceptionTransformerTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('errors', $data);
         $this->assertCount(1, $data['errors']);
 
-        $this->assertArraySubset(array(
+        $actual = $data['errors'][0];
+        $this->assertEquals(array_replace_recursive($actual, array(
             'code' => 10,
             'title' => 'error message'
-        ), $data['errors'][0]);
+        )), $actual);
     }
 
     public function testTransformedHttpExceptionDataHasStatusKey()
@@ -31,8 +32,9 @@ class JsonApiExceptionTransformerTest extends \PHPUnit_Framework_TestCase
 
         $data = $transformer->transformException($exception);
 
-        $this->assertArraySubset(array(
+        $actual = $data['errors'][0];
+        $this->assertEquals(array_replace_recursive($actual, array(
             'status' => 400
-        ), $data['errors'][0]);
+        )), $actual);
     }
 }

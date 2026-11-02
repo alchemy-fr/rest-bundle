@@ -4,7 +4,7 @@ namespace Alchemy\Rest\Tests\Result;
 
 use Alchemy\Rest\Result\SuccessResult;
 
-class SuccessResultTest extends \PHPUnit_Framework_TestCase
+class SuccessResultTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetMetadataReturnsOriginalMetadata()
