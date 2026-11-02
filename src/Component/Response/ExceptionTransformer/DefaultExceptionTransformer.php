@@ -23,7 +23,7 @@ class DefaultExceptionTransformer implements ExceptionTransformer
      * @param \Exception $exception
      * @return array
      */
-    public function transformException(\Exception $exception)
+    public function transformException(\Throwable $exception)
     {
         $data = array(
             'code' => $exception->getCode(),
