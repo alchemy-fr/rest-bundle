@@ -15,10 +15,10 @@ class RestConfiguration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): \Symfony\Component\Config\Definition\Builder\TreeBuilder
     {
-        $builder = new TreeBuilder();
+        $builder = new TreeBuilder('alchemy_rest');
 
         $builder
-            ->root('alchemy_rest')
+            ->getRootNode()
                 ->children()
                     ->arrayNode('exceptions')
                         ->addDefaultsIfNotSet()
