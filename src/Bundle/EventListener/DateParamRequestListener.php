@@ -4,7 +4,7 @@ namespace Alchemy\RestBundle\EventListener;
 
 use Alchemy\Rest\Request\DateParser;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class DateParamRequestListener implements EventSubscriberInterface
@@ -18,15 +18,15 @@ class DateParamRequestListener implements EventSubscriberInterface
     /**
      * @param DateParser $parser
      */
-    public function __construct(DateParser $parser = null)
+    public function __construct(?DateParser $parser = null)
     {
         $this->dateParser = $parser ?: new DateParser\FormatDateParser();
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @param RequestEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
         $attributes = $request->attributes;

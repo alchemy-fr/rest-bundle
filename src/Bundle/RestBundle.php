@@ -16,7 +16,7 @@ class RestBundle extends Bundle
         $container->addCompilerPass(new TransformerCompilerPass());
     }
 
-    public function getContainerExtension()
+    public function getContainerExtension(): ?\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
     {
         return new RestExtension();
     }

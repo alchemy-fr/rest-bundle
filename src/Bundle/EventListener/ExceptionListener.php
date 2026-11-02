@@ -6,7 +6,7 @@ use Alchemy\Rest\Request\ContentTypeMatcher;
 use Alchemy\Rest\Response\ExceptionTransformer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -34,8 +34,8 @@ class ExceptionListener implements EventSubscriberInterface
      */
     public function __construct(
         ContentTypeMatcher $matcher,
-        ExceptionTransformer $exceptionTransformer = null,
-        array $handledContentTypes = null
+        ?ExceptionTransformer $exceptionTransformer = null,
+        ?array $handledContentTypes = null
     ) {
         $this->contentTypeMatcher = $matcher;
         $this->exceptionTransformer = $exceptionTransformer ?: new ExceptionTransformer\DefaultExceptionTransformer();
@@ -43,9 +43,9 @@ class ExceptionListener implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseForExceptionEvent $event
+     * @param ExceptionEvent $event
      */
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
         $request = $event->getRequest();
         $acceptHeader = $request->headers->get('Accept', '*/*');
@@ -54,7 +54,7 @@ class ExceptionListener implements EventSubscriberInterface
             return;
         }
 
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         $data = $this->exceptionTransformer->transformException($exception);
         $status = $exception instanceof HttpExceptionInterface ? $exception->getStatusCode() : 500;
 

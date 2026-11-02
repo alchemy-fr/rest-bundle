@@ -14,7 +14,7 @@ class ContentTypeMatcher
     /**
      * @param Negotiator|null $negotiator
      */
-    public function __construct(Negotiator $negotiator = null)
+    public function __construct(?Negotiator $negotiator = null)
     {
         $this->negotiator = $negotiator ?: new Negotiator();
     }

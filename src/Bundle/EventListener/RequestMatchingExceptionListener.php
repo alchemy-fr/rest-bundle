@@ -4,7 +4,7 @@ namespace Alchemy\RestBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestMatcherInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class RequestMatchingExceptionListener implements EventSubscriberInterface
@@ -31,9 +31,9 @@ class RequestMatchingExceptionListener implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseForExceptionEvent $event
+     * @param ExceptionEvent $event
      */
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
         if (! $this->matcher->matches($event->getRequest())) {
             return;

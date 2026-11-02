@@ -4,7 +4,7 @@ namespace Alchemy\RestBundle\EventListener;
 
 use Alchemy\RestBundle\Rest\Request\PaginationOptionsFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class PaginationParamRequestListener implements EventSubscriberInterface
@@ -23,9 +23,9 @@ class PaginationParamRequestListener implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @param RequestEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
         $attributes = $request->attributes;

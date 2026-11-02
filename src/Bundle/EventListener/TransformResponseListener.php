@@ -8,7 +8,7 @@ use League\Fractal\Pagination\PagerfantaPaginatorAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -34,7 +34,7 @@ class TransformResponseListener implements EventSubscriberInterface
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function onKernelView(GetResponseForControllerResultEvent $event)
+    public function onKernelView(ViewEvent $event)
     {
         $request = $event->getRequest();
 

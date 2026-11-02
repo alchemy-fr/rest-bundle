@@ -4,7 +4,7 @@ namespace Alchemy\RestBundle\EventListener;
 
 use Alchemy\RestBundle\Rest\Request\SortOptionsFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class SortParamRequestListener implements EventSubscriberInterface
@@ -23,9 +23,9 @@ class SortParamRequestListener implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @param RequestEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
         $attributes = $request->attributes;
