@@ -13,7 +13,7 @@ class EncodeJsonResponseListener implements EventSubscriberInterface
 
     public function onKernelView(ViewEvent $event)
     {
-        if (! $event->getRequest()->attributes->get('_rest[encode_response]', false, true)) {
+        if (! ($event->getRequest()->attributes->all()['_rest']['encode_response'] ?? false)) {
             return;
         }
 

@@ -28,7 +28,7 @@ class ResourceCreatedListener implements EventSubscriberInterface
             return;
         }
 
-        $transformerKey = $request->attributes->get('_rest[transform]', null, true);
+        $transformerKey = ($request->attributes->all()['_rest']['transform'] ?? null);
 
         $transformedData = $this->transformer->transform($transformerKey, $result->getResource());
         $transformedData = $this->setMetadata($transformedData, $result);

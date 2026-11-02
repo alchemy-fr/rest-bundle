@@ -42,7 +42,7 @@ class TransformResponseListener implements EventSubscriberInterface
             return;
         }
 
-        $config = $this->normalizeConfig($request->attributes->get('_rest', array(), true));
+        $config = $this->normalizeConfig($request->attributes->get('_rest', array()));
         $includes = $request->query->get('include', null);
         $data = $event->getControllerResult();
 
